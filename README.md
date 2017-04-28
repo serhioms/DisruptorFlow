@@ -1,6 +1,25 @@
 # DisruptorFlow
 Sequential sync/async task processing based on [LMax Disruptor](https://github.com/LMAX-Exchange/disruptor/blob/master/docs/Disruptor.docx)
 
+## DisruptorFlow processing diagram
+
+![alt text](https://github.com/serhioms/DisruptorFlow/blob/master/result/DisruptorFlow%20Diagram.png)
+
+
+## Synch task
+
+Sync task is descendent of TaskSync<T>. Sequential processor start it, wait for the end then start next task in a sequence. All synchronous tasks run in one thread.
+
+
+## Asynch task
+
+Async task is descendent of TaskAsync<T>. Sequential processor start then immedeately start next task in a sequence. Asynchronous tasks perform in separate threads in parallel of synchronous tasks.
+
+
+## Task Set
+
+Task set is an object of class TaskSet<T>. Constructor of this class accept any amount of sync/async tasks.
+
 
 ## Usage
 
@@ -31,6 +50,6 @@ Sequential sync/async task processing based on [LMax Disruptor](https://github.c
 ```
 
 
-## DisruptorFlow diagram
+### Using in test
 
-![alt text](https://github.com/serhioms/DisruptorFlow/blob/master/result/DisruptorFlow%20Diagram.png)
+[example]()
