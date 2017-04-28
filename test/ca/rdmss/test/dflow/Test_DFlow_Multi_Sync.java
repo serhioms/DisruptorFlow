@@ -1,4 +1,4 @@
-package ca.rdmss.test.dbatcher;
+package ca.rdmss.test.dflow;
 
 import static org.junit.Assert.fail;
 
@@ -13,9 +13,9 @@ import ca.rdmss.multitest.annotation.MultiEndOfSet;
 import ca.rdmss.multitest.annotation.MultiTest;
 import ca.rdmss.multitest.annotation.MultiThread;
 import ca.rdmss.multitest.junitrule.MultiTestRule;
-import ca.rdmss.test.dbatcher.impl.TestContext;
-import ca.rdmss.test.dbatcher.impl.TestTask;
-import ca.rdmss.test.dbatcher.impl.TestTaskResult;
+import ca.rdmss.test.dflow.impl.TestContext;
+import ca.rdmss.test.dflow.impl.TestTask;
+import ca.rdmss.test.dflow.impl.TestTaskResult;
 
 @MultiTest(repeatNo=TestSuite_DFlow.MAX_TRY, threadSet=TestSuite_DFlow.THREAD_SET)
 public class Test_DFlow_Multi_Sync {

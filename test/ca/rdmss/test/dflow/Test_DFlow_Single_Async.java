@@ -1,4 +1,4 @@
-package ca.rdmss.test.dbatcher;
+package ca.rdmss.test.dflow;
 
 import static org.junit.Assert.fail;
 
@@ -12,12 +12,13 @@ import ca.rdmss.multitest.annotation.MultiBefore;
 import ca.rdmss.multitest.annotation.MultiTest;
 import ca.rdmss.multitest.annotation.MultiThread;
 import ca.rdmss.multitest.junitrule.MultiTestRule;
-import ca.rdmss.test.dbatcher.impl.TestContext;
-import ca.rdmss.test.dbatcher.impl.TestTask;
-import ca.rdmss.test.dbatcher.impl.TestTaskResult;
+import ca.rdmss.test.dflow.impl.TestContext;
+import ca.rdmss.test.dflow.impl.TestTask;
+import ca.rdmss.test.dflow.impl.TestTaskAsync;
+import ca.rdmss.test.dflow.impl.TestTaskResult;
 
 @MultiTest(repeatNo=TestSuite_DFlow.MAX_TRY)
-public class Test_DFlow_Single_Sync {
+public class Test_DFlow_Single_Async {
 
 	@Rule
 	public MultiTestRule rule = new MultiTestRule(this);
@@ -37,13 +38,13 @@ public class Test_DFlow_Single_Sync {
 		dflow.onData(new TestContext(), 
 				new TestTask("1"),
 				new TestTask("2"),
-				new TestTask("3"),
+				new TestTaskAsync("3"),
 				new TestTask("4"),
 				new TestTask("5"),
 				new TestTaskResult()
 				);
 	}
-
+	
 	@Test
 	public void test() throws Throwable {
 
@@ -67,5 +68,4 @@ public class Test_DFlow_Single_Sync {
 		if( isFailed ){
 			fail("Check log");
 		}
-	}
-}
+	}}

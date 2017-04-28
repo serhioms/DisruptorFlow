@@ -1,13 +1,13 @@
-package ca.rdmss.test.dbatcher.impl;
+package ca.rdmss.test.dflow.impl;
 
 import ca.rdmss.dflow.Task;
-import ca.rdmss.dflow.TaskSync;
+import ca.rdmss.dflow.TaskAsync;
 
-public class TestTask extends TaskSync<TestContext> {
+public class TestTaskAsync extends TaskAsync<TestContext> {
 
 	final private String taskId;
 	
-	public TestTask(String taskId) {
+	public TestTaskAsync(String taskId) {
 		this.taskId = taskId;
 	}
 
