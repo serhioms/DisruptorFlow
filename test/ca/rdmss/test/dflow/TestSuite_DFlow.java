@@ -1,4 +1,4 @@
-package ca.rdmss.test.dbatcher;
+package ca.rdmss.test.dflow;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

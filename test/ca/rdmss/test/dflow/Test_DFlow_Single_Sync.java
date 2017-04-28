@@ -1,4 +1,4 @@
-package ca.rdmss.test.dbatcher;
+package ca.rdmss.test.dflow;
 
 import static org.junit.Assert.fail;
 
@@ -8,18 +8,16 @@ import org.junit.Test;
 import com.lmax.disruptor.dsl.ProducerType;
 
 import ca.rdmss.dflow.DisruptorFlow;
-import ca.rdmss.dflow.TaskSet;
 import ca.rdmss.multitest.annotation.MultiBefore;
 import ca.rdmss.multitest.annotation.MultiTest;
 import ca.rdmss.multitest.annotation.MultiThread;
 import ca.rdmss.multitest.junitrule.MultiTestRule;
-import ca.rdmss.test.dbatcher.impl.TestContext;
-import ca.rdmss.test.dbatcher.impl.TestTask;
-import ca.rdmss.test.dbatcher.impl.TestTaskAsync;
-import ca.rdmss.test.dbatcher.impl.TestTaskResult;
+import ca.rdmss.test.dflow.impl.TestContext;
+import ca.rdmss.test.dflow.impl.TestTask;
+import ca.rdmss.test.dflow.impl.TestTaskResult;
 
 @MultiTest(repeatNo=TestSuite_DFlow.MAX_TRY)
-public class Test_DFlow_Single_Set {
+public class Test_DFlow_Single_Sync {
 
 	@Rule
 	public MultiTestRule rule = new MultiTestRule(this);
@@ -38,10 +36,9 @@ public class Test_DFlow_Single_Set {
 	public void producer1(){
 		dflow.onData(new TestContext(), 
 				new TestTask("1"),
-				new TaskSet<TestContext>(
-						new TestTask("2"),
-						new TestTaskAsync("3"),
-						new TestTask("4")),
+				new TestTask("2"),
+				new TestTask("3"),
+				new TestTask("4"),
 				new TestTask("5"),
 				new TestTaskResult()
 				);
