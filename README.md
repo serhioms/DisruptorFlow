@@ -6,19 +6,19 @@ Sequential sync/async task processing based on [LMax Disruptor](https://github.c
 ![alt text](https://github.com/serhioms/DisruptorFlow/blob/master/result/DisruptorFlow%20Diagram.png)
 
 
-## Synch task
+## Sync Task
 
-Sync task is descendent of TaskSync<T>. Sequential processor start it, wait for the end then start next task in a sequence. All synchronous tasks run in one thread.
+Sync task is descendent of TaskSync'<T>'. Sequential processor start it, wait for the end then start next task in a sequence. All synchronous tasks run in one thread.
 
 
-## Asynch task
+## Async Task
 
-Async task is descendent of TaskAsync<T>. Sequential processor start then immedeately start next task in a sequence. Asynchronous tasks perform in separate threads in parallel of synchronous tasks.
+Async task is descendent of TaskAsync'<T>'. Sequential processor start then immedeately start next task in a sequence. Asynchronous tasks perform in separate threads in parallel of synchronous tasks.
 
 
 ## Task Set
 
-Task set is an object of class TaskSet<T>. Constructor of this class accept any amount of sync/async tasks.
+Task set is an object of class TaskSet'<T>'. Constructor of this class accept any amount of sync/async tasks.
 
 
 ## Usage
