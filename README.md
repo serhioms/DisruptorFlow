@@ -1,16 +1,16 @@
-# DisruptorFlow
-Sequential sync/async task processing based on [LMax Disruptor](https://github.com/LMAX-Exchange/disruptor/blob/master)
+# Flow Disruptor
+Sequential sync/async task processing based on [LMax Disruptor](https://github.com/LMAX-Exchange/disruptor)
 
 This is a regular Maven project.
 
-## DisruptorFlow processing diagram
+## Flow disruptor processing diagram
 
 ![alt text](https://github.com/serhioms/DisruptorFlow/blob/master/result/DisruptorFlow.png)
 
 
 ## Sync Task
 
-Sync task is descendent from TaskSync<T>. Flow disruptor start it, wait for the end then start next task in a sequence. All synchronous tasks run in the same thread.
+Sync task is descendent from TaskSync< T >. Flow disruptor start it, wait for the end then start next task in a sequence. All synchronous tasks run in the same thread.
 
     public class TestSyncTask extends TaskSync<TestContext> {
     	int id = tasskIdGenerator.incrementAndGet();
@@ -24,7 +24,7 @@ Sync task is descendent from TaskSync<T>. Flow disruptor start it, wait for the 
 
 ## Async Task
 
-Async task is descendant from TaskAsync<T>. Flow disruptor start it in new thread then immedeately start next task in a sequence. All asynchronous tasks run in separate threads in parallel of synchronous tasks.
+Async task is descendant from TaskAsync< T >. Flow disruptor start it in new thread then immedeately start next task in a sequence. All asynchronous tasks run in separate threads in parallel of synchronous tasks.
 
     public class TestAsyncTask extends TaskAsync<TestContext> {
     	int id = tasskIdGenerator.incrementAndGet();
@@ -38,7 +38,7 @@ Async task is descendant from TaskAsync<T>. Flow disruptor start it in new threa
     
 ## Flow
                 
-Flow (or subflow) is descendant from TaskFlow<T>. You can set many sync/asyn tasks for the flow in constructor or vie setter. All this task will be executed sequentially. You can set specific exception handler for the flow/subflow.
+Flow (or subflow) is descendant from TaskFlow< T >. You can set many sync/asyn tasks for the flow in constructor or vie setter. All this task will be executed sequentially. You can set specific exception handler for the flow/subflow.
 
 	    TaskFlow<TestContext> flow = new TaskFlow<TestContext>(
 	            new TestSyncTask(),
@@ -47,7 +47,7 @@ Flow (or subflow) is descendant from TaskFlow<T>. You can set many sync/asyn tas
 
 ## Flow Disruptor
 
-Flow disruptor is generic class which perform task flow execution in pipeline pattern. Pipeline pattern described [here](https://github.com/LMAX-Exchange/disruptor/blob/master/docs/Disruptor.docx). The only parameter of flow disruptor is context class.
+Flow disruptor is generic class which perform task flow execution vie pipeline pattern. Pipeline pattern described [here](https://github.com/LMAX-Exchange/disruptor/blob/master/docs/Disruptor.docx). The only parameter of flow disruptor is context class.
 
 	    DisruptorFlow<TestContext> dflow = new DisruptorFlow<TestContext>();
         ***
@@ -57,7 +57,7 @@ Flow disruptor is generic class which perform task flow execution in pipeline pa
 
 ## Exception Handler
 
-Exception Handler is generic class which flow disruptor call on any exception happen during task execution. There is default handler implemented as simple as System.err messenger.
+Exception Handler is generic class which flow disruptor call on any exception happen during task execution. There is a default handler implemented as simple as System.err messenger.
 
 	    dflow.setExceptionHandler(new ExceptionHandler<TestContext>(){
 	        @Override
