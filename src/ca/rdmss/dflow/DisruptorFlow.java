@@ -7,6 +7,7 @@ import com.lmax.disruptor.dsl.ProducerType;
 
 import ca.rdmss.dflow.impl.AsyncContext;
 import ca.rdmss.dflow.impl.AsyncTaskExecutor;
+import ca.rdmss.dflow.impl.DafaultExceptionHandler;
 import ca.rdmss.dflow.impl.UnicastDisruptor;
 
 public class DisruptorFlow<T> {
@@ -15,10 +16,15 @@ public class DisruptorFlow<T> {
 	private UnicastDisruptor<T> sync;
 	
 	private ProducerType producerType = ProducerType.MULTI;
-	
+
+	private ExceptionHandler<T> exceptionHandler = new DafaultExceptionHandler<T>();
+
 	public void start(){
 		async = new UnicastDisruptor<AsyncContext<T>>(producerType, new AsyncTaskExecutor<T>());
 		sync = new UnicastDisruptor<T>(async);
+
+		sync.setExceptionHandler(exceptionHandler);
+		//async.setExceptionHandler(exceptionHandler); // TODO: must be same handler
 
 		async.startDisruptor();
 		sync.startDisruptor();
@@ -45,5 +51,9 @@ public class DisruptorFlow<T> {
 
 	public void setProducerType(ProducerType producerType) {
 		this.producerType = producerType;
+	}
+	
+	public void setExceptionHandler(ExceptionHandler exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
 	}
 }

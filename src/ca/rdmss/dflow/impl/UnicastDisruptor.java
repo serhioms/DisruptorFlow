@@ -18,9 +18,19 @@ public class UnicastDisruptor<T> extends LMaxDisruptor<T>{
 			@Override
 			public void onEvent(ContextEvent<T> event, long sequence, boolean endOfBatch) throws Exception {
 				try {
-					task.execute(event.getContext());
-				} catch( Throwable t){
-					t.printStackTrace(); // TODO: exception handler here
+					switch( task.execute(event.getContext()) ){
+					case Next: return;
+					case Fail: 
+					case Stop: 
+					case End:  return;
+					}
+				} catch( Throwable ex){
+					switch( getExceptionHandler().handleTaskException(null, ex) ){
+					case Next: return;
+					case Fail: 
+					case Stop: 
+					case End:  return;
+					}
 				}
 			}
 			

@@ -4,8 +4,16 @@ final public class TaskSet<T> extends TaskSync<T>{
 
 	private Task<T>[] set;
 
+	private ExceptionHandler exceptionHandler;
+	
 	@SafeVarargs
 	public TaskSet(Task<T>... set) {
+		this.set = set;
+	}
+
+	@SafeVarargs
+	public TaskSet(ExceptionHandler exceptionHandler, Task<T>... set) {
+		this.exceptionHandler = exceptionHandler;
 		this.set = set;
 	}
 
@@ -18,7 +26,7 @@ final public class TaskSet<T> extends TaskSync<T>{
 	}
 
 	@Override
-	final public boolean execute(T context) throws Throwable {
+	final public TaskTransition execute(T context) throws Throwable {
 		throw new RuntimeException("execute() can't be applied to set");
 	}
 
@@ -30,5 +38,13 @@ final public class TaskSet<T> extends TaskSync<T>{
 	@Override
 	final public boolean isSet() {
 		return true;
+	}
+
+	public ExceptionHandler getExceptionHandler() {
+		return exceptionHandler;
+	}
+
+	public void setExceptionHandler(ExceptionHandler exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
 	}
 }

@@ -35,5 +35,8 @@ abstract public class TaskSync<T> implements Task<T> {
 		throw new RuntimeException("setSet() must be implemented for set only!");
 	}
 
-	
+	@Override
+	public ExceptionHandler getExceptionHandler() {
+		return null; // No exception handlers for task level exceptions
+	}
 }

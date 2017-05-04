@@ -7,6 +7,7 @@ import ca.rdmss.dflow.Task;
 public class ContextEvent<T> {
 
 	final private AtomicReference<T> ref = new AtomicReference<T>();
+	
 	private Task<T>[] tasks;
 	
 	public T getContext() {
@@ -23,5 +24,10 @@ public class ContextEvent<T> {
 	
 	public void setTasks(Task<T>[] tasks) {
 		this.tasks = tasks;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("tasks=%d", tasks==null?0:tasks.length);
 	}
 }

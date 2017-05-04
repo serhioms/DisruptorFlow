@@ -5,11 +5,8 @@ import ca.rdmss.dflow.lmax.LMaxDisruptor;
 
 public interface Task<T> {
 
-	final public static boolean CONTINUE = true;
-	final public static boolean STOP = false;
-
 	// Task execution interface
-	public boolean execute(T context) throws Throwable;
+	public TaskTransition execute(T context) throws Throwable;
 	
 	// Task can be 
 	// sync  - wait for end of task before start next one 
@@ -28,4 +25,7 @@ public interface Task<T> {
 	// setter/getter for set
 	public Task<T>[] getSet();
 	public void setSet(Task<T>[] tasks);
+	
+	// Exception handler
+	public ExceptionHandler<T> getExceptionHandler();
 }
