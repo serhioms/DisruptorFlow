@@ -9,33 +9,26 @@ import ca.rdmss.dflow.lmax.LMaxDisruptor;
 
 public class TasksHandler<T> implements EventHandler<ContextEvent<T>> {
 
-	final private LMaxDisruptor<AsyncContext<T>> disruptor;
+	final private LMaxDisruptor<T> disruptor;
 	
-	DafaultExceptionHandler<T> tempDefExceptionHandler = new DafaultExceptionHandler<T>();// TODO: must be disruptor handler
-	
-	public TasksHandler(LMaxDisruptor<AsyncContext<T>> disruptor) {
+	public TasksHandler(LMaxDisruptor<T> disruptor) {
 		this.disruptor = disruptor;
 	}
 
 	@Override
 	public void onEvent(ContextEvent<T> event, long sequence, boolean endOfBatch) throws Exception {
-		pipeline(event.getContext(), event.getTasks(), tempDefExceptionHandler); // TODO: must be disruptor handler
+		pipeline(event.getContext(), event.getTasks(), disruptor.getExceptionHandler());
 	}
 
-	private boolean pipeline(T context, Task<T>[] tasks, ExceptionHandler<T> defExceptionHandler) {
+	@SuppressWarnings("unchecked")
+	private boolean pipeline(T context, Task<T>[] tasks, ExceptionHandler<T> exceptionHandler) {
 		for(Task<T> task: tasks ){
 			
-			if( disruptor != null ){
-				task.setDisruptor(disruptor);
-			}
-
-			ExceptionHandler<T> exceptionHandler = task.getExceptionHandler() != null? task.getExceptionHandler(): defExceptionHandler;
-			
 			if( task.isSet() ){
-				if( !pipeline(context, task.getSet(), exceptionHandler) ) // TODO: process set vie recursion
+				if( !pipeline(context, task.getSet(), task.getExceptionHandler() != null? task.getExceptionHandler(): exceptionHandler) )
 					return false; 
 			} else if( task.isAsync() ){
-				task.publishAsync(context);
+				disruptor.onData(context, task);
 			} else {
 				try {
 					switch( task.execute(context) ){

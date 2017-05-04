@@ -104,7 +104,8 @@ public class LMaxDisruptor<T> {
 		producer.onData(context);
 	}
 	
-	public void onData(T context, Task<T>[] tasks) {
+	@SuppressWarnings("unchecked")
+	public void onData(T context, Task<T>... tasks) {
 		producer.onData(context, tasks);
 	}
 	

@@ -4,7 +4,7 @@ final public class TaskSet<T> extends TaskSync<T>{
 
 	private Task<T>[] set;
 
-	private ExceptionHandler exceptionHandler;
+	private ExceptionHandler<T> exceptionHandler;
 	
 	@SafeVarargs
 	public TaskSet(Task<T>... set) {
@@ -12,7 +12,7 @@ final public class TaskSet<T> extends TaskSync<T>{
 	}
 
 	@SafeVarargs
-	public TaskSet(ExceptionHandler exceptionHandler, Task<T>... set) {
+	public TaskSet(ExceptionHandler<T> exceptionHandler, Task<T>... set) {
 		this.exceptionHandler = exceptionHandler;
 		this.set = set;
 	}
@@ -31,20 +31,16 @@ final public class TaskSet<T> extends TaskSync<T>{
 	}
 
 	@Override
-	final public void publishAsync(T context) {
-		throw new RuntimeException("publishAsync() can't be applied to set");
-	}
-
-	@Override
 	final public boolean isSet() {
 		return true;
 	}
 
-	public ExceptionHandler getExceptionHandler() {
+	@Override
+	public ExceptionHandler<T> getExceptionHandler() {
 		return exceptionHandler;
 	}
 
-	public void setExceptionHandler(ExceptionHandler exceptionHandler) {
+	public void setExceptionHandler(ExceptionHandler<T> exceptionHandler) {
 		this.exceptionHandler = exceptionHandler;
 	}
 }
