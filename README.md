@@ -18,9 +18,9 @@ Sync task is descendent of TaskSync. Sequential processor start it, wait for the
 Async task is descendent of TaskAsync. Sequential processor start then immedeately start next task in a sequence. Asynchronous tasks perform in separate threads in parallel of synchronous tasks.
 
 
-## Task Set
+## Flow
 
-Task set is an object of class TaskSet. Constructor of this class accept any amount of sync/async tasks.
+Flow is an object of class TaskFlow. Constructor of this class accept exception handler and any amount of sync/async tasks.
 
 
 ## Usage
