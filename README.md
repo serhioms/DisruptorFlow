@@ -5,7 +5,7 @@ This is a regular Maven project.
 
 ## DisruptorFlow processing diagram
 
-![alt text](https://github.com/serhioms/DisruptorFlow/blob/master/result/DisruptorFlow%20Diagram.png)
+![alt text](https://github.com/serhioms/DisruptorFlow/blob/master/result/DisruptorFlow.png)
 
 
 ## Sync Task
