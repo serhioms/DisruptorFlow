@@ -7,11 +7,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.Rule;
 import org.junit.Test;
 
-import com.lmax.disruptor.dsl.ProducerType;
-
 import ca.rdmss.dflow.DisruptorFlow;
 import ca.rdmss.dflow.ExceptionHandler;
-import ca.rdmss.dflow.TaskSet;
+import ca.rdmss.dflow.TaskFlow;
 import ca.rdmss.dflow.TaskTransition;
 import ca.rdmss.multitest.annotation.MultiBefore;
 import ca.rdmss.multitest.annotation.MultiTest;
@@ -22,10 +20,10 @@ import ca.rdmss.test.dflow.impl.TestTask;
 import ca.rdmss.test.dflow.impl.TestTaskAsync;
 import ca.rdmss.test.dflow.impl.TestTaskResult;
 
-@MultiTest(repeatNo=Test_DFlow_Set_Exception.MAX_TRY)
-public class Test_DFlow_Set_Exception {
+@MultiTest(repeatNo=Test_DFlow_FlowException.MAX_TRY)
+public class Test_DFlow_FlowException {
 
-	final public static int MAX_TRY = TestSuite_DFlow.MAX_TRY;
+	final public static int MAX_TRY = Suite_DFlow.MAX_TRY;
 	
 	final public static int MAX_NOT_COMPLETED = 100;
 	final public static int MAX_EXCEPTION = 4;
@@ -42,9 +40,8 @@ public class Test_DFlow_Set_Exception {
 	
 	@MultiBefore
 	public void setUp() throws Exception {
-		TestSuite_DFlow.test.clean();
-		
-		dflow.setProducerType(ProducerType.SINGLE);
+		Suite_DFlow.test.clean();
+
 		dflow.setExceptionHandler(new ExceptionHandler<TestContext>(){
 
 			@Override
@@ -55,6 +52,7 @@ public class Test_DFlow_Set_Exception {
 			}
 			
 		});
+		
 		dflow.start();
 	}
 	
@@ -62,10 +60,10 @@ public class Test_DFlow_Set_Exception {
 	public void producer(){
 		dflow.onData(new TestContext(false), 
 				new TestTask("1"),
-				new TaskSet<TestContext>(
+				new TaskFlow<TestContext>(
 						new TestTask("2", TaskTransition.End, END),
 						new TestTaskAsync("3"),
-						new TaskSet<TestContext>(
+						new TaskFlow<TestContext>(
 								new TestTask("41", TaskTransition.Stop, STOP),
 								new TestTask("42", TaskTransition.Fail, FAILED),
 								new TestTask("43", false, EXCEPTION)),
@@ -83,7 +81,7 @@ public class Test_DFlow_Set_Exception {
 		// 1 producers -> 1 consumer
 		int expected = MAX_TRY*1*1 - MAX_NOT_COMPLETED*3-MAX_EXCEPTION;
 
-		int actual = TestSuite_DFlow.test.getTotal();
+		int actual = Suite_DFlow.test.getTotal();
 		
 		boolean isFailed = actual != expected;
 		

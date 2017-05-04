@@ -5,58 +5,51 @@ import static org.junit.Assert.fail;
 import org.junit.Rule;
 import org.junit.Test;
 
-import com.lmax.disruptor.dsl.ProducerType;
-
-import ca.rdmss.dflow.DisruptorFlow;
+import ca.rdmss.dflow.impl.UnicastDisruptor;
 import ca.rdmss.multitest.annotation.MultiBefore;
 import ca.rdmss.multitest.annotation.MultiEndOfSet;
 import ca.rdmss.multitest.annotation.MultiTest;
 import ca.rdmss.multitest.annotation.MultiThread;
 import ca.rdmss.multitest.junitrule.MultiTestRule;
 import ca.rdmss.test.dflow.impl.TestContext;
-import ca.rdmss.test.dflow.impl.TestTask;
-import ca.rdmss.test.dflow.impl.TestTaskAsync;
-import ca.rdmss.test.dflow.impl.TestTaskResult;
+import ca.rdmss.test.dflow.impl.TestHandler;
 
-@MultiTest(repeatNo=TestSuite_DFlow.MAX_TRY, threadSet=TestSuite_DFlow.THREAD_SET)
-public class Test_DFlow_Multi_Async {
+@MultiTest(repeatNo=Suite_DFlow.MAX_TRY, threadSet=Suite_DFlow.THREAD_SET)
+public class Test_DFlow_Unicast {
 
 	@Rule
 	public MultiTestRule rule = new MultiTestRule(this);
 
-	DisruptorFlow<TestContext> dflow = new DisruptorFlow<TestContext>();
+	TestContext context = new TestContext();
+	
+	UnicastDisruptor<TestContext> unicast;
 	
 	@MultiBefore
 	public void setUp() throws Exception {
-		TestSuite_DFlow.test.clean();
 		
-		dflow.setProducerType(ProducerType.MULTI);
-		dflow.start();
+		Suite_DFlow.test.clean();
+		
+		unicast = new UnicastDisruptor<TestContext>(new TestHandler()); // 1 consumer
+		
+		unicast.startDisruptor();
 	}
 	
 	@MultiThread
 	public void producer(){
-		dflow.onData(new TestContext(), 
-				new TestTask("1"),
-				new TestTask("2"),
-				new TestTaskAsync("3"),
-				new TestTask("4"),
-				new TestTask("5"),
-				new TestTaskResult()
-				);
+		unicast.onData(context);
 	}
 
 	boolean isFailed;
 
 	@MultiEndOfSet
 	public void endOfSet(){
-
-		dflow.shutdown();
 		
-		// N producers -> 1 consumer
-		int expected = TestSuite_DFlow.MAX_TRY*rule.getThreadNo()*1;
+		unicast.shutdown();
 
-		int actual = TestSuite_DFlow.test.getTotal();
+		// N producers -> 1 consumer
+		int expected = Suite_DFlow.MAX_TRY*rule.getThreadNo()*1;
+
+		int actual = context.counter.get();
 		
 		if( actual != expected ){ 
 			isFailed = true;
@@ -66,15 +59,18 @@ public class Test_DFlow_Multi_Async {
 		}
 		
 		// Prepare for next set
-		TestSuite_DFlow.test.clean();
-
-		dflow.start();
+		context.counter.set(0);
+		
+		// Initialize new unicast
+		unicast = new UnicastDisruptor<TestContext>(new TestHandler()); // 1 consumer
+		
+		unicast.startDisruptor();
 	}
 
 	@Test
 	public void test() throws Throwable {
 
-		dflow.shutdown();
+		unicast.shutdown();
 
 		System.out.printf("%s\n", rule.getReport());
 

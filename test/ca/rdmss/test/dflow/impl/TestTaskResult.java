@@ -2,7 +2,7 @@ package ca.rdmss.test.dflow.impl;
 
 import ca.rdmss.dflow.TaskSync;
 import ca.rdmss.dflow.TaskTransition;
-import ca.rdmss.test.dflow.TestSuite_DFlow;
+import ca.rdmss.test.dflow.Suite_DFlow;
 
 public class TestTaskResult extends TaskSync<TestContext> {
 
@@ -13,7 +13,7 @@ public class TestTaskResult extends TaskSync<TestContext> {
 			System.out.println(this);
 		}
 		
-		TestSuite_DFlow.test.count( context.getTasktrack() ); // collect task path
+		Suite_DFlow.test.count( context.getTasktrack() ); // collect task path
 		
 		return TaskTransition.Next;
 	}
