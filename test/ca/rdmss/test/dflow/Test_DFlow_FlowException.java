@@ -58,7 +58,7 @@ public class Test_DFlow_FlowException {
 	
 	@MultiThread
 	public void producer(){
-		dflow.onData(new TestContext(false), 
+		dflow.run(new TestContext(false), 
 				new TestTask("1"),
 				new TaskFlow<TestContext>(
 						new TestTask("2", TaskTransition.End, END),
@@ -76,7 +76,7 @@ public class Test_DFlow_FlowException {
 	@Test
 	public void test() throws Throwable {
 
-		dflow.shutdown();
+		dflow.stop();
 		
 		// 1 producers -> 1 consumer
 		int expected = MAX_TRY*1*1 - MAX_NOT_COMPLETED*3-MAX_EXCEPTION;

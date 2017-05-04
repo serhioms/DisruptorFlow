@@ -33,7 +33,7 @@ public class Test_DFlow_Flow {
 	
 	@MultiThread
 	public void producer(){
-		dflow.onData(new TestContext(), 
+		dflow.run(new TestContext(), 
 				new TestTask("1"),
 				new TaskFlow<TestContext>(
 						new TestTask("2"),
@@ -49,7 +49,7 @@ public class Test_DFlow_Flow {
 	@MultiEndOfSet
 	public void endOfSet(){
 
-		dflow.shutdown();
+		dflow.stop();
 		
 		// N producers -> 1 consumer
 		int expected = Suite_DFlow.MAX_TRY*rule.getThreadNo()*1;
@@ -72,7 +72,7 @@ public class Test_DFlow_Flow {
 	@Test
 	public void test() throws Throwable {
 
-		dflow.shutdown();
+		dflow.stop();
 
 		System.out.printf("%s\n", rule.getReport());
 

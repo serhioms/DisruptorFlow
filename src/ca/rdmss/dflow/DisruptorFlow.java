@@ -25,18 +25,18 @@ public class DisruptorFlow<T> {
 		sync.startDisruptor();
 	}
 	
-	public void shutdown(){
+	public void stop(){
 		sync.shutdown();
 		async.shutdown();
 	}
 	
-	public void shutdown(long timeout, TimeUnit timeUnit) throws TimeoutException{
+	public void stop(long timeout, TimeUnit timeUnit) throws TimeoutException{
 		sync.shutdown(timeout, timeUnit);
 		async.shutdown(timeout, timeUnit);
 	}
 	
 	@SafeVarargs
-	final public void onData(T context, Task<T>... tasks){
+	final public void run(T context, Task<T>... tasks){
 		sync.onData(context, tasks);
 	}
 
