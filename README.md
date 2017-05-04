@@ -10,18 +10,62 @@ This is a regular Maven project.
 
 ## Sync Task
 
-Sync task is descendent of TaskSync. Sequential processor start it, wait for the end then start next task in a sequence. All synchronous tasks run in one thread.
+Sync task is descendent of TaskSync. Disruptor flow start it, wait for the end then start next task in a sequence. All synchronous tasks run in the same thread.
 
+    public class TestSyncTask extends TaskSync<TestContext> {
+    	int id = tasskIdGenerator.incrementAndGet();
+    	
+        @Override
+        public TaskTransition execute(TestContext context) throws Throwable {
+            System.out.printf("%d) Hi from Sync!\n", id);
+            return TaskTransition.Next;
+        }
+    }
 
 ## Async Task
 
-Async task is descendent of TaskAsync. Sequential processor start then immedeately start next task in a sequence. Asynchronous tasks perform in separate threads in parallel of synchronous tasks.
+Async task is descendent of TaskAsync.  Disruptor flow processor start it then immedeately start next task in a sequence. Asynchronous tasks perform in separate threads in parallel of synchronous tasks.
 
+    public class TestAsyncTask extends TaskAsync<TestContext> {
+    	int id = tasskIdGenerator.incrementAndGet();
 
+    	@Override
+        public TaskTransition execute(TestContext context) throws Throwable {
+            System.out.printf("%d) Hi from Async!\n", id);
+            return TaskTransition.Next;
+        }
+    }
+    
 ## Flow
+                
+Flow is descendent of class TaskFlow. Constructor of this class accept any amount of sync/async tasks. Also you can set specific exception handler for the flow.
 
-Flow is an object of class TaskFlow. Constructor of this class accept exception handler and any amount of sync/async tasks.
+	    TaskFlow<TestContext> flow = new TaskFlow<TestContext>(
+	            new TestSyncTask(),
+	            new TestAsyncTask(),
+	            new TestSyncTask());
 
+## Disruptor Flow
+
+Disruptor flow is a generic task processor class. You have to specify which class to be a context for all your task. Also you can set default exception handler (System.out handler predefined).
+
+	    DisruptorFlow<TestContext> dflow = new DisruptorFlow<TestContext>();
+        ***
+	    dflow.start();
+        ***
+	    dflow.shutdown();
+
+## Exception Handler
+
+Exception Handler is a generic class which invokes by disruptor flow processor in case of any exception happen during task execution. It provide the flow context.
+
+	    dflow.setExceptionHandler(new ExceptionHandler<TestContext>(){
+	        @Override
+	        public TaskTransition handleTaskException(TestContext context, Throwable ex) {
+	            System.err.printf("Flow failed due to %s\n", ex.getMessage());
+	            return TaskTransition.Fail;
+	        }
+	    });
 
 ## Usage
 
