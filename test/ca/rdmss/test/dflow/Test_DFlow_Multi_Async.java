@@ -19,7 +19,7 @@ import ca.rdmss.test.dflow.impl.TestTaskAsync;
 import ca.rdmss.test.dflow.impl.TestTaskResult;
 
 @MultiTest(repeatNo=TestSuite_DFlow.MAX_TRY, threadSet=TestSuite_DFlow.THREAD_SET)
-public class Test_DFlow_Multi_Async_ {
+public class Test_DFlow_Multi_Async {
 
 	@Rule
 	public MultiTestRule rule = new MultiTestRule(this);

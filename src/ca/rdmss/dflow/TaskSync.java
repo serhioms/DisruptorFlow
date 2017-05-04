@@ -1,23 +1,10 @@
 package ca.rdmss.dflow;
 
-import ca.rdmss.dflow.impl.AsyncContext;
-import ca.rdmss.dflow.lmax.LMaxDisruptor;
-
 abstract public class TaskSync<T> implements Task<T> {
-
-	@Override
-	public void publishAsync(T context) {
-		throw new RuntimeException("publishAsync() must be implemented for AsyncTask only!");
-	}
 
 	@Override
 	public boolean isAsync() {
 		return false; // task is sync by default
-	}
-
-	@Override
-	public void setDisruptor(LMaxDisruptor<AsyncContext<T>> disruptor) {
-		// make sense to implement for AsyncTask only
 	}
 
 	@Override
@@ -35,5 +22,8 @@ abstract public class TaskSync<T> implements Task<T> {
 		throw new RuntimeException("setSet() must be implemented for set only!");
 	}
 
-	
+	@Override
+	public ExceptionHandler<T> getExceptionHandler() {
+		throw new RuntimeException("getExceptionHandler() must be implemented for set only!");
+	}
 }

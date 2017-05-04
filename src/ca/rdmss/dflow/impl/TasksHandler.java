@@ -2,43 +2,51 @@ package ca.rdmss.dflow.impl;
 
 import com.lmax.disruptor.EventHandler;
 
+import ca.rdmss.dflow.ExceptionHandler;
 import ca.rdmss.dflow.Task;
 import ca.rdmss.dflow.lmax.ContextEvent;
 import ca.rdmss.dflow.lmax.LMaxDisruptor;
 
 public class TasksHandler<T> implements EventHandler<ContextEvent<T>> {
 
-	final private LMaxDisruptor<AsyncContext<T>> disruptor;
+	final private LMaxDisruptor<T> disruptor;
 	
-	public TasksHandler(LMaxDisruptor<AsyncContext<T>> disruptor) {
+	public TasksHandler(LMaxDisruptor<T> disruptor) {
 		this.disruptor = disruptor;
 	}
 
 	@Override
 	public void onEvent(ContextEvent<T> event, long sequence, boolean endOfBatch) throws Exception {
-		pipeline(event.getContext(), event.getTasks());
+		pipeline(event.getContext(), event.getTasks(), disruptor.getExceptionHandler());
 	}
 
-	private void pipeline(T context, Task<T>[] tasks) {
+	@SuppressWarnings("unchecked")
+	private boolean pipeline(T context, Task<T>[] tasks, ExceptionHandler<T> exceptionHandler) {
 		for(Task<T> task: tasks ){
 			
-			if( disruptor != null ){
-				task.setDisruptor(disruptor);
-			}
-			
 			if( task.isSet() ){
-				pipeline(context, task.getSet()); // TODO: process set vie recursion
+				if( !pipeline(context, task.getSet(), task.getExceptionHandler() != null? task.getExceptionHandler(): exceptionHandler) )
+					return false; 
 			} else if( task.isAsync() ){
-				task.publishAsync(context);
+				disruptor.onData(context, task);
 			} else {
 				try {
-					if( !task.execute(context) ){
-						break; // task require stop feature processing
+					switch( task.execute(context) ){
+					case Next: continue;
+					case Fail: return false;
+					case Stop: return false;
+					case End:  return false;
 					}
-				} catch( Throwable t){
-					t.printStackTrace(); // TODO: exceeption handler must be here
+				} catch( Throwable ex){
+					switch( exceptionHandler.handleTaskException(context, ex) ){
+					case Next: continue;
+					case Fail: return false;
+					case Stop: return false;
+					case End:  return false;
+					}
 				}
 			}
 		}
+		return true;
 	}
 }

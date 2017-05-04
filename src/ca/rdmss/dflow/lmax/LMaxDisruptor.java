@@ -12,17 +12,21 @@ import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.Util;
 
+import ca.rdmss.dflow.ExceptionHandler;
 import ca.rdmss.dflow.Task;
+import ca.rdmss.dflow.impl.DafaultExceptionHandler;
 
 public class LMaxDisruptor<T> {
 
-	static final public int BUFFER_SIZE = 100_000; // !00K buffer
+	static final public int BUFFER_SIZE = 100_000; // 100K buffer
 	
 	final private Disruptor<ContextEvent<T>> disruptor;
 	
 	final private ContextProducer<T> producer;
 	
 	protected WaitStrategy waitStrategy = new YieldingWaitStrategy();
+
+	private ExceptionHandler<T> exceptionHandler = new DafaultExceptionHandler<T>();
 	
 	ThreadFactory threadFactory = new ThreadFactory() {
 		@Override
@@ -69,6 +73,22 @@ public class LMaxDisruptor<T> {
 	 * Start disrupter
 	 */
 	public void startDisruptor(){
+		disruptor.setDefaultExceptionHandler(new com.lmax.disruptor.ExceptionHandler<ContextEvent<T>>(){
+			@Override
+			public void handleEventException(Throwable ex, long sequence, ContextEvent<T> event) {
+				exceptionHandler.handleTaskException(event.getContext(), ex);
+			}
+
+			@Override
+			public void handleOnStartException(Throwable ex) {
+				exceptionHandler.handleTaskException(null, ex);
+			}
+
+			@Override
+			public void handleOnShutdownException(Throwable ex) {
+				exceptionHandler.handleTaskException(null, ex);
+			}
+		});
 		disruptor.start();
 	}
 
@@ -84,8 +104,17 @@ public class LMaxDisruptor<T> {
 		producer.onData(context);
 	}
 	
-	public void onData(T context, Task<T>[] tasks) {
+	@SuppressWarnings("unchecked")
+	public void onData(T context, Task<T>... tasks) {
 		producer.onData(context, tasks);
 	}
 	
+
+	public ExceptionHandler<T> getExceptionHandler() {
+		return exceptionHandler;
+	}
+
+	public void setExceptionHandler(ExceptionHandler<T> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+	}
 }
