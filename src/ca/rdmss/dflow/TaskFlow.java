@@ -1,18 +1,18 @@
 package ca.rdmss.dflow;
 
-final public class TaskSet<T> extends TaskSync<T>{
+final public class TaskFlow<T> extends TaskSync<T>{
 
 	private Task<T>[] set;
 
 	private ExceptionHandler<T> exceptionHandler;
 	
 	@SafeVarargs
-	public TaskSet(Task<T>... set) {
+	public TaskFlow(Task<T>... set) {
 		this.set = set;
 	}
 
 	@SafeVarargs
-	public TaskSet(ExceptionHandler<T> exceptionHandler, Task<T>... set) {
+	public TaskFlow(ExceptionHandler<T> exceptionHandler, Task<T>... set) {
 		this.exceptionHandler = exceptionHandler;
 		this.set = set;
 	}

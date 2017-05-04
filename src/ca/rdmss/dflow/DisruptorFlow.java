@@ -3,7 +3,6 @@ package ca.rdmss.dflow;
 import java.util.concurrent.TimeUnit;
 
 import com.lmax.disruptor.TimeoutException;
-import com.lmax.disruptor.dsl.ProducerType;
 
 import ca.rdmss.dflow.impl.DafaultExceptionHandler;
 import ca.rdmss.dflow.impl.UnicastDisruptor;
@@ -13,13 +12,11 @@ public class DisruptorFlow<T> {
 	private UnicastDisruptor<T> async;
 	private UnicastDisruptor<T> sync;
 	
-	private ProducerType producerType = ProducerType.MULTI;
-
 	private ExceptionHandler<T> exceptionHandler = new DafaultExceptionHandler<T>();
 
 	public void start(){
-		async = new UnicastDisruptor<T>(ProducerType.MULTI);
-		sync = new UnicastDisruptor<T>(producerType, async); // TODO: Actually let's put MULTI only
+		async = new UnicastDisruptor<T>();
+		sync = new UnicastDisruptor<T>(async); // TODO: Actually let's put MULTI only
 
 		sync.setExceptionHandler(exceptionHandler);
 		async.setExceptionHandler(exceptionHandler);
@@ -42,15 +39,7 @@ public class DisruptorFlow<T> {
 	final public void onData(T context, Task<T>... tasks){
 		sync.onData(context, tasks);
 	}
-	
-	public ProducerType getProducerType() {
-		return producerType;
-	}
 
-	public void setProducerType(ProducerType producerType) {
-		this.producerType = producerType;
-	}
-	
 	public void setExceptionHandler(ExceptionHandler<T> exceptionHandler) {
 		this.exceptionHandler = exceptionHandler;
 	}
