@@ -11,7 +11,7 @@ import ca.rdmss.dflow.TaskTransition;
 
 public class DFlowExample {
 
-	static AtomicInteger tasskIdGenerator = new AtomicInteger(0);
+    static AtomicInteger tasskIdGenerator = new AtomicInteger(0);
 	
     static class TestContext {
     }
