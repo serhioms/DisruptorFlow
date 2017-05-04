@@ -10,7 +10,7 @@ This is a regular Maven project.
 
 ## Sync Task
 
-Sync task is descendent from TaskSync< T >. Flow disruptor start it, wait for the end then start next task in a sequence. All synchronous tasks run in the same thread.
+Sync task is descendent from `TaskSync< T >`. Flow disruptor start it, wait for the end then start next task in a sequence. All synchronous tasks run in the same thread.
 
     public class TestSyncTask extends TaskSync<TestContext> {
     	int id = tasskIdGenerator.incrementAndGet();
@@ -24,7 +24,7 @@ Sync task is descendent from TaskSync< T >. Flow disruptor start it, wait for th
 
 ## Async Task
 
-Async task is descendant from TaskAsync< T >. Flow disruptor start it in new thread then immedeately start next task in a sequence. All asynchronous tasks run in separate threads in parallel of synchronous tasks.
+Async task is descendant from `TaskAsync< T >`. Flow disruptor start it in new thread then immedeately start next task in a sequence. All asynchronous tasks run in separate threads in parallel of synchronous tasks.
 
     public class TestAsyncTask extends TaskAsync<TestContext> {
     	int id = tasskIdGenerator.incrementAndGet();
@@ -38,7 +38,7 @@ Async task is descendant from TaskAsync< T >. Flow disruptor start it in new thr
     
 ## Flow
                 
-Flow (or subflow) is descendant from TaskFlow< T >. You can set many sync/asyn tasks for the flow in constructor or vie setter. All this task will be executed sequentially. You can set specific exception handler for the flow/subflow.
+Flow (or subflow) is descendant from `TaskFlow< T >`. You can set many sync/asyn tasks for the flow in constructor or vie setter. All this task will be executed sequentially. You can set specific exception handler for the flow/subflow.
 
 	    TaskFlow<TestContext> flow = new TaskFlow<TestContext>(
 	            new TestSyncTask(),
@@ -78,7 +78,7 @@ Flow context is any java class. Context instance must be provided when you run p
     dflow.run(new TestContext(), flow);
 
 
-## [Full Example](https://github.com/serhioms/DisruptorFlow/blob/master/test/ca/rdmss/test/dflow/DFlowExample.java)
+### [Full Example](https://github.com/serhioms/DisruptorFlow/blob/master/test/ca/rdmss/test/dflow/DFlowExample.java)
 
 Typical output:
 
@@ -118,46 +118,75 @@ Async task is the second in flow but usually executed bit later then third sync 
 ```
 
 
-### Using in test
-
-## [DisruptorFlow Test Suit](https://github.com/serhioms/DisruptorFlow/blob/master/test/ca/rdmss/test/dflow/Suite_DFlow.java)
+### [DisruptorFlow Test Suit](https://github.com/serhioms/DisruptorFlow/blob/master/test/ca/rdmss/test/dflow/Suite_DFlow.java)
 
 Output for i7-3630QM CPU@ 2.40Ghz (4 core, 8 logical processors, L1=256kb, l2=1mb, l3=6mb) -ea -Xms1g -Xmx1g
 
 === Test_DFlow_Unicast done 2,000,000 time(s) ===
+
 Threads Total      OneTry     OneTry(ns)
+
 ------- ---------- ---------- ----------
+
 1       301.0  mls 150.5   ns    150.500 pass: expected=2,000,000 actual=2,000,000
+
 2       807.0  mls 403.5   ns    403.500 pass: expected=4,000,000 actual=4,000,000
+
 3       1.5    sec 739.5   ns    739.500 pass: expected=6,000,000 actual=6,000,000
+
 4       3.0    sec 1.5    mks   1482.500 pass: expected=8,000,000 actual=8,000,000
+
 ------- ---------- ---------- ----------
+
 
 === Test_DFlow_Sync done 2,000,000 time(s) ===
+
 Threads Total      OneTry     OneTry(ns)
+
 ------- ---------- ---------- ----------
+
 1       884.0  mls 442.0   ns    442.000 pass: expected=2,000,000 actual=2,000,000
+
 2       1.8    sec 899.5   ns    899.500 pass: expected=4,000,000 actual=4,000,000
+
 3       2.5    sec 1.3    mks   1263.500 pass: expected=6,000,000 actual=6,000,000
+
 4       3.4    sec 1.7    mks   1689.500 pass: expected=8,000,000 actual=8,000,000
+
 ------- ---------- ---------- ----------
+
 
 === Test_DFlow_Async done 2,000,000 time(s) ===
+
 Threads Total      OneTry     OneTry(ns)
-------- ---------- ---------- ----------
-1       1.9    sec 947.5   ns    947.500 pass: expected=2,000,000 actual=2,000,000
-2       3.4    sec 1.7    mks   1695.500 pass: expected=4,000,000 actual=4,000,000
-3       5.3    sec 2.7    mks   2670.000 pass: expected=6,000,000 actual=6,000,000
-4       7.0    sec 3.5    mks   3518.000 pass: expected=8,000,000 actual=8,000,000
+
 ------- ---------- ---------- ----------
 
-=== Test_DFlow_Flow done 2,000,000 time(s) ===
-Threads Total      OneTry     OneTry(ns)
+1       1.9    sec 947.5   ns    947.500 pass: expected=2,000,000 actual=2,000,000
+
+2       3.4    sec 1.7    mks   1695.500 pass: expected=4,000,000 actual=4,000,000
+
+3       5.3    sec 2.7    mks   2670.000 pass: expected=6,000,000 actual=6,000,000
+
+4       7.0    sec 3.5    mks   3518.000 pass: expected=8,000,000 actual=8,000,000
+
 ------- ---------- ---------- ----------
+
+
+=== Test_DFlow_Flow done 2,000,000 time(s) ===
+
+Threads Total      OneTry     OneTry(ns)
+
+------- ---------- ---------- ----------
+
 1       1.8    sec 903.5   ns    903.500 pass: expected=2,000,000 actual=2,000,000
+
 2       4.0    sec 2.0    mks   2005.000 pass: expected=4,000,000 actual=4,000,000
+
 3       5.3    sec 2.7    mks   2668.500 pass: expected=6,000,000 actual=6,000,000
+
 4       7.4    sec 3.7    mks   3686.500 pass: expected=8,000,000 actual=8,000,000
+
 ------- ---------- ---------- ----------
 
 ===Test_DFlow_FlowException done 2,000,000 time(s) in   3.4 sec (  1.7 mks/try) === pass: expected=1,999,696 actual=1,999,696
