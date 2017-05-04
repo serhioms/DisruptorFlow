@@ -158,4 +158,7 @@ i7-3630QM CPU@ 2.40Ghz (4 core, 8 logical processors, L1=256kb, l2=1mb, l3=6mb) 
 	4       7.4    sec 3.7    mks   3686.500 pass: expected=8,000,000 actual=8,000,000
 	------- ---------- ---------- ----------
 
-	===Test_DFlow_FlowException done 2,000,000 time(s) in   3.4 sec (  1.7 mks/try) === pass: expected=1,999,696 actual=1,999,696
+	===Test_DFlow_FlowException done 2,000,000 time(s) in   3.4 sec (  1.7 mks/try) === 
+	pass: expected=1,999,696 actual=1,999,696
+	
+Each test done 2 mln times with 1, 2, 3, 4 parallel threads correspondently. Last test done in 1 thread only but with couple exceptions during task execution.
