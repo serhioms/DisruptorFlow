@@ -77,6 +77,17 @@ Flow context is any java class. Context instance must be provided when you run p
     
     dflow.run(new TestContext(), flow);
 
+
+## [Full Example](https://github.com/serhioms/DisruptorFlow/blob/master/test/ca/rdmss/test/dflow/DFlowExample.java)
+
+Typical output:
+
+	1) Hi from Sync!
+	3) Hi from Sync!
+	2) Hi from Async!
+	
+Async task is the second in flow but usually executed bit later then third sync task.
+
     
 ## Usage
 
@@ -109,4 +120,46 @@ Flow context is any java class. Context instance must be provided when you run p
 
 ### Using in test
 
-[example]()
+## [DisruptorFlow Test Suit](https://github.com/serhioms/DisruptorFlow/blob/master/test/ca/rdmss/test/dflow/Suite_DFlow.java)
+
+Output for i7-3630QM CPU@ 2.40Ghz (4 core, 8 logical processors, L1=256kb, l2=1mb, l3=6mb) -ea -Xms1g -Xmx1g
+
+=== Test_DFlow_Unicast done 2,000,000 time(s) ===
+Threads Total      OneTry     OneTry(ns)
+------- ---------- ---------- ----------
+1       301.0  mls 150.5   ns    150.500 pass: expected=2,000,000 actual=2,000,000
+2       807.0  mls 403.5   ns    403.500 pass: expected=4,000,000 actual=4,000,000
+3       1.5    sec 739.5   ns    739.500 pass: expected=6,000,000 actual=6,000,000
+4       3.0    sec 1.5    mks   1482.500 pass: expected=8,000,000 actual=8,000,000
+------- ---------- ---------- ----------
+
+=== Test_DFlow_Sync done 2,000,000 time(s) ===
+Threads Total      OneTry     OneTry(ns)
+------- ---------- ---------- ----------
+1       884.0  mls 442.0   ns    442.000 pass: expected=2,000,000 actual=2,000,000
+2       1.8    sec 899.5   ns    899.500 pass: expected=4,000,000 actual=4,000,000
+3       2.5    sec 1.3    mks   1263.500 pass: expected=6,000,000 actual=6,000,000
+4       3.4    sec 1.7    mks   1689.500 pass: expected=8,000,000 actual=8,000,000
+------- ---------- ---------- ----------
+
+=== Test_DFlow_Async done 2,000,000 time(s) ===
+Threads Total      OneTry     OneTry(ns)
+------- ---------- ---------- ----------
+1       1.9    sec 947.5   ns    947.500 pass: expected=2,000,000 actual=2,000,000
+2       3.4    sec 1.7    mks   1695.500 pass: expected=4,000,000 actual=4,000,000
+3       5.3    sec 2.7    mks   2670.000 pass: expected=6,000,000 actual=6,000,000
+4       7.0    sec 3.5    mks   3518.000 pass: expected=8,000,000 actual=8,000,000
+------- ---------- ---------- ----------
+
+=== Test_DFlow_Flow done 2,000,000 time(s) ===
+Threads Total      OneTry     OneTry(ns)
+------- ---------- ---------- ----------
+1       1.8    sec 903.5   ns    903.500 pass: expected=2,000,000 actual=2,000,000
+2       4.0    sec 2.0    mks   2005.000 pass: expected=4,000,000 actual=4,000,000
+3       5.3    sec 2.7    mks   2668.500 pass: expected=6,000,000 actual=6,000,000
+4       7.4    sec 3.7    mks   3686.500 pass: expected=8,000,000 actual=8,000,000
+------- ---------- ---------- ----------
+
+===Test_DFlow_FlowException done 2,000,000 time(s) in   3.4 sec (  1.7 mks/try) === pass: expected=1,999,696 actual=1,999,696
+
+
