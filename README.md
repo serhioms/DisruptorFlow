@@ -75,7 +75,7 @@ Flow context is any java class. Context instance must be provided when you run p
     	***
     }
     
-    dflow.run(new TestContext(), flow);
+    dflow.process(new TestContext(), flow);
 
 
 ### [Full Example](https://github.com/serhioms/DisruptorFlow/blob/master/test/ca/rdmss/test/dflow/DFlowExample.java)
