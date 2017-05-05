@@ -16,7 +16,7 @@ public class DisruptorFlow<T> {
 
 	public void start(){
 		async = new UnicastDisruptor<T>();
-		sync = new UnicastDisruptor<T>(async); // TODO: Actually let's put MULTI only
+		sync = new UnicastDisruptor<T>(async);
 
 		sync.setExceptionHandler(exceptionHandler);
 		async.setExceptionHandler(exceptionHandler);

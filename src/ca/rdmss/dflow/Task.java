@@ -16,5 +16,6 @@ public interface Task<T> {
 	// setter/getter for the set
 	public Task<T>[] getSet();
 	public void setSet(Task<T>[] tasks);
+	
 	public ExceptionHandler<T> getExceptionHandler();
 }

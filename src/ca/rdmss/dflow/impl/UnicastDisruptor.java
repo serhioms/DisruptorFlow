@@ -28,7 +28,12 @@ public class UnicastDisruptor<T> extends LMaxDisruptor<T>{
 					try {
 						task.execute(event.getContext());
 					} catch( Throwable ex){
-						getExceptionHandler().handleTaskException(event.getContext(), ex);
+						ExceptionHandler<T> taskHandler = task.getExceptionHandler();
+						if( taskHandler!= null ){
+							taskHandler.handleTaskException(event.getContext(), ex);
+						} else {
+							getExceptionHandler().handleTaskException(event.getContext(), ex);
+						}
 					}
 				}
 			}
@@ -61,7 +66,8 @@ public class UnicastDisruptor<T> extends LMaxDisruptor<T>{
 							case End:  return false;
 							}
 						} catch( Throwable ex){
-							switch( exceptionHandler.handleTaskException(context, ex) ){
+							ExceptionHandler<T> taskHandler = task.getExceptionHandler();
+							switch( taskHandler!=null? taskHandler.handleTaskException(context, ex): exceptionHandler.handleTaskException(context, ex) ){
 							case Next: continue;
 							case Fail: return false;
 							case Stop: return false;
