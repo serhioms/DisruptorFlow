@@ -58,7 +58,7 @@ public class Test_DFlow_FlowException {
 	
 	@MultiThread
 	public void producer(){
-		dflow.run(new TestContext(false), 
+		dflow.process(new TestContext(false), 
 				new TestTask("1"),
 				new TaskFlow<TestContext>(
 						new TestTask("2", TaskTransition.End, END),

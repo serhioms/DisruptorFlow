@@ -7,7 +7,6 @@ import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.TimeoutException;
 import com.lmax.disruptor.WaitStrategy;
-import com.lmax.disruptor.YieldingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.Util;
@@ -18,15 +17,18 @@ import ca.rdmss.dflow.impl.DafaultExceptionHandler;
 
 public class LMaxDisruptor<T> {
 
-	static final public int BUFFER_SIZE = 100_000; // 100K buffer
-	
-	final private Disruptor<ContextEvent<T>> disruptor;
-	
-	final private ContextProducer<T> producer;
-	
-	protected WaitStrategy waitStrategy = new YieldingWaitStrategy();
+	static final public int BUFFER_SIZE = 300_000; // 100K buffer by default
 
+	// Sleep BatchEventProcessor rather the spin if not busy
+	protected WaitStrategy waitStrategy = new com.lmax.disruptor.SleepingWaitStrategy(); 
+	
+	// Spin BatchEventProcessor if not busy with yielding among others
+	//protected WaitStrategy waitStrategy = new com.lmax.disruptor.YieldingWaitStrategy();  
+	
 	private ExceptionHandler<T> exceptionHandler = new DafaultExceptionHandler<T>();
+
+	private Disruptor<ContextEvent<T>> disruptor;
+	private ContextProducer<T> producer;
 	
 	ThreadFactory threadFactory = new ThreadFactory() {
 		@Override
@@ -34,11 +36,12 @@ public class LMaxDisruptor<T> {
 			return new Thread(r);
 		}
 	};
-
+	
 	public LMaxDisruptor(ProducerType producerType, ContextFactory<T> eventFactory) {
 		this(BUFFER_SIZE, producerType, eventFactory);
 	}  
 
+	//@SuppressWarnings("deprecation")
 	public LMaxDisruptor(int bufferSize, ProducerType producerType, ContextFactory<T> eventFactory) {
 		/*
 		 * Create LMax Disrupter
@@ -46,7 +49,7 @@ public class LMaxDisruptor<T> {
 		disruptor = new Disruptor<ContextEvent<T>>(
 				eventFactory,
 				Util.ceilingNextPowerOfTwo(bufferSize), // size of the ring buffer must be power of 2
-				threadFactory,
+				threadFactory, // Each disruptor runs in 1 thread
 				producerType,
 				waitStrategy
 				);
@@ -59,6 +62,7 @@ public class LMaxDisruptor<T> {
 		 * Initialize producer
 		 */
 		producer = new Producer<T>(ringBuffer);
+
 	}  
 
 	/*

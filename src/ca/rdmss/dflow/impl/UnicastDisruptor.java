@@ -49,12 +49,16 @@ public class UnicastDisruptor<T> extends LMaxDisruptor<T>{
 					pipeline(event.getContext(), event.getTasks(), disruptor.getExceptionHandler());
 				}
 				
-			private boolean pipeline(T context, Task<T>[] tasks, ExceptionHandler<T> exceptionHandler) {
+			private boolean pipeline(T context, Task<T>[] tasks, ExceptionHandler<T> parentHandler) {
 				for(Task<T> task: tasks ){
 					
 					if( task.isSet() ){
-						if( !pipeline(context, task.getSet(), task.getExceptionHandler() != null? task.getExceptionHandler(): exceptionHandler) )
+						
+						ExceptionHandler<T> taskHandler = task.getExceptionHandler();
+						
+						if( !pipeline(context, task.getSet(), taskHandler != null? taskHandler: parentHandler) ){
 							return false; 
+						}
 					} else if( task.isAsync() ){
 						disruptor.onData(context, task);
 					} else {
@@ -67,7 +71,7 @@ public class UnicastDisruptor<T> extends LMaxDisruptor<T>{
 							}
 						} catch( Throwable ex){
 							ExceptionHandler<T> taskHandler = task.getExceptionHandler();
-							switch( taskHandler!=null? taskHandler.handleTaskException(context, ex): exceptionHandler.handleTaskException(context, ex) ){
+							switch( taskHandler!=null? taskHandler.handleTaskException(context, ex): parentHandler.handleTaskException(context, ex) ){
 							case Next: continue;
 							case Fail: return false;
 							case Stop: return false;

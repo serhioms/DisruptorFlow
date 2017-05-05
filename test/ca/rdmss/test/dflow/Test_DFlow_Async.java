@@ -32,7 +32,7 @@ public class Test_DFlow_Async {
 	
 	@MultiThread
 	public void producer(){
-		dflow.run(new TestContext(), 
+		dflow.process(new TestContext(), 
 				new TestTask("1"),
 				new TestTask("2"),
 				new TestTaskAsync("3"),
