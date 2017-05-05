@@ -17,5 +17,6 @@ public interface Task<T> {
 	public Task<T>[] getSet();
 	public void setSet(Task<T>[] tasks);
 	
+	// Task/flow exception handler
 	public ExceptionHandler<T> getExceptionHandler();
 }
