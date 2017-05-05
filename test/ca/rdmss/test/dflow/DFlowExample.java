@@ -56,7 +56,7 @@ public class DFlowExample {
 	            new TestSyncTask());
 
 
-	    dflow.run(new TestContext(), flow);
+	    dflow.process(new TestContext(), flow);
 	    
 	    dflow.stop();
     }    

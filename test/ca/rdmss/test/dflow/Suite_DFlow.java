@@ -12,7 +12,8 @@ import ca.rdmss.util.TestHelper;
 	Test_DFlow_Sync.class,
 	Test_DFlow_Async.class,
 	Test_DFlow_Flow.class,
-	Test_DFlow_FlowException.class
+	Test_DFlow_FlowException.class,
+	Test_DFlow_MultiContext.class
 })
 public class Suite_DFlow { 
 	/*

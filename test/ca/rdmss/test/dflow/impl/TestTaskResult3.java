@@ -4,10 +4,10 @@ import ca.rdmss.dflow.TaskSync;
 import ca.rdmss.dflow.TaskTransition;
 import ca.rdmss.test.dflow.Suite_DFlow;
 
-public class TestTaskResult extends TaskSync<TestContext> {
+public class TestTaskResult3 extends TaskSync<TestContext3> {
 
 	@Override
-	public TaskTransition execute(TestContext context) throws Throwable {
+	public TaskTransition execute(TestContext3 context) throws Throwable {
 
 		if( context.isPrint ){
 			System.out.println(this);

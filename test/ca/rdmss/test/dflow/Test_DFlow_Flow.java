@@ -33,7 +33,7 @@ public class Test_DFlow_Flow {
 	
 	@MultiThread
 	public void producer(){
-		dflow.run(new TestContext(), 
+		dflow.process(new TestContext(), 
 				new TestTask("1"),
 				new TaskFlow<TestContext>(
 						new TestTask("2"),

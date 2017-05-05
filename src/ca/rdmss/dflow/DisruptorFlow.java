@@ -16,7 +16,7 @@ public class DisruptorFlow<T> {
 
 	public void start(){
 		async = new UnicastDisruptor<T>();
-		sync = new UnicastDisruptor<T>(async); // TODO: Actually let's put MULTI only
+		sync = new UnicastDisruptor<T>(async);
 
 		sync.setExceptionHandler(exceptionHandler);
 		async.setExceptionHandler(exceptionHandler);
@@ -26,8 +26,14 @@ public class DisruptorFlow<T> {
 	}
 	
 	public void stop(){
-		sync.shutdown();
-		async.shutdown();
+		if( sync != null ){
+			sync.shutdown();
+			sync = null;
+		}
+		if( async != null ){
+			async.shutdown();
+			async = null;
+		}
 	}
 	
 	public void stop(long timeout, TimeUnit timeUnit) throws TimeoutException{
@@ -36,8 +42,10 @@ public class DisruptorFlow<T> {
 	}
 	
 	@SafeVarargs
-	final public void run(T context, Task<T>... tasks){
-		sync.onData(context, tasks);
+	final public void process(T context, Task<T>... tasks){
+		if( sync != null ){
+			sync.onData(context, tasks);
+		}
 	}
 
 	public void setExceptionHandler(ExceptionHandler<T> exceptionHandler) {

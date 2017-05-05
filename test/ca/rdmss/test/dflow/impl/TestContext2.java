@@ -2,18 +2,18 @@ package ca.rdmss.test.dflow.impl;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class TestContext {
+public class TestContext2 {
 
 	final public AtomicInteger counter = new AtomicInteger(0);
 	final public boolean isPrint;
 
 	private String tasktrack = "";
 	
-	public TestContext() {
+	public TestContext2() {
 		this(false);
 	}
 
-	public TestContext(boolean isPrint) {
+	public TestContext2(boolean isPrint) {
 		this.isPrint = isPrint;
 	}
 
@@ -27,6 +27,7 @@ public class TestContext {
 	public String getTasktrack(){
 		return tasktrack;
 	}
+	
 	
 	public void clean() {
 		tasktrack = null;

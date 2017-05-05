@@ -30,7 +30,7 @@ public class Test_DFlow_Sync {
 	
 	@MultiThread
 	public void producer(){
-		dflow.run(new TestContext(), 
+		dflow.process(new TestContext(), 
 				new TestTask("1"),
 				new TestTask("2"),
 				new TestTask("3"),

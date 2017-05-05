@@ -22,7 +22,7 @@ public class Producer<T> implements ContextProducer<T> {
 		publishEvent(context, tasks);
 	}
 	
-	synchronized private void publishEvent(T context, Task<T>[] tasks) {
+	protected void publishEvent(T context, Task<T>[] tasks) {
 		/*
 		 * Grab the next sequence
 		 */
