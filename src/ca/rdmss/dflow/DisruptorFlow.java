@@ -15,6 +15,10 @@ public class DisruptorFlow<T> {
 	private ExceptionHandler<T> exceptionHandler = new DafaultExceptionHandler<T>();
 
 	public void start(){
+		if( async != null || sync != null ){
+			throw new RuntimeException("Disruptor already started!?");
+		}
+		
 		async = new UnicastDisruptor<T>();
 		sync = new UnicastDisruptor<T>(async);
 
@@ -26,13 +30,13 @@ public class DisruptorFlow<T> {
 	}
 	
 	public void stop(){
-		if( sync != null ){
+		try {
 			sync.shutdown();
 			sync = null;
-		}
-		if( async != null ){
 			async.shutdown();
 			async = null;
+		} catch(NullPointerException e){
+			throw new RuntimeException("Disruptor not started!?");
 		}
 	}
 	
@@ -43,8 +47,10 @@ public class DisruptorFlow<T> {
 	
 	@SafeVarargs
 	final public void process(T context, Task<T>... tasks){
-		if( sync != null ){
+		try {
 			sync.onData(context, tasks);
+		} catch(NullPointerException e){
+			throw new RuntimeException("Disruptor not started!?");
 		}
 	}
 
