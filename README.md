@@ -14,13 +14,13 @@ Sync task is descendent from [`TaskSync< T >`](https://github.com/serhioms/Disru
 
     public class TestSyncTask extends TaskSync<TestContext> {
     
-		int id = tasskIdGenerator.incrementAndGet();
+	int id = tasskIdGenerator.incrementAndGet();
     	
-		@Override
-        public TaskTransition execute(TestContext context) throws Throwable {
-            System.out.printf("%d) Hi from Sync!\n", id);
-            return TaskTransition.Next;
-        }
+	@Override
+	public TaskTransition execute(TestContext context) throws Throwable {
+		System.out.printf("%d) Hi from Sync!\n", id);
+		return TaskTransition.Next;
+	}
     }
 
 ## Async Task
@@ -29,13 +29,13 @@ Async task is descendant from [`TaskAsync< T >`](https://github.com/serhioms/Dis
 
     public class TestAsyncTask extends TaskAsync<TestContext> {
     
-		int id = tasskIdGenerator.incrementAndGet();
+	int id = tasskIdGenerator.incrementAndGet();
     
-		@Override
-        public TaskTransition.Next execute(TestContext context) throws Throwable {
-            System.out.printf("%d) Hi from Async!\n", id);
-            return TaskTransition.Next;
-        }
+	@Override
+	public TaskTransition.Next execute(TestContext context) throws Throwable {
+		System.out.printf("%d) Hi from Async!\n", id);
+		return TaskTransition.Next;
+	}
     }
     
 ## Flow
