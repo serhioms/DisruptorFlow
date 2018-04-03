@@ -10,9 +10,9 @@ This is a regular Maven project.
 
 ## Sync Task
 
-Sync task is descendent from [`TaskSync< T >`](https://github.com/serhioms/DisruptorFlow/blob/master/src/ca/rdmss/dflow/TaskSync.java). Flow disruptor start it, wait for the end then start next task in a sequence of sync. All synchronous tasks run in the same thread. From [XPDL](http://www.xpdl.org/standards/xpdl-2.2/XPDL%202.2%20(2012-02-24).pdf) prospective sync tasks equivalent to FULL-BLOCKED activities.
+Sync task is descendent from [`TaskSync< T >`](https://github.com/serhioms/DisruptorFlow/blob/master/src/ca/rdmss/dflow/TaskSync.java). Flow disruptor start it, wait for the end then start next one in a sequence. All synchronous tasks run in the same thread. From [XPDL](http://www.xpdl.org/standards/xpdl-2.2/XPDL%202.2%20(2012-02-24).pdf) prospective sync tasks equivalent to FULL-BLOCKED activities.
 
-    public class TestSyncTask extends [TaskSync](https://github.com/serhioms/DisruptorFlow/blob/master/src/ca/rdmss/dflow/TaskSync.java)<[TestContext](https://github.com/serhioms/DisruptorFlow/blob/master/test/ca/rdmss/test/dflow/impl/TestContext.java)> {
+    public class TestSyncTask extends [`TaskSync`](https://github.com/serhioms/DisruptorFlow/blob/master/src/ca/rdmss/dflow/TaskSync.java)<[TestContext](https://github.com/serhioms/DisruptorFlow/blob/master/test/ca/rdmss/test/dflow/impl/TestContext.java)> {
     
     	int id = tasskIdGenerator.incrementAndGet();
     	
