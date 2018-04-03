@@ -10,72 +10,74 @@ This is a regular Maven project.
 
 ## Sync Task
 
-Sync task is descendent from [`TaskSync< T >`](https://github.com/serhioms/DisruptorFlow/blob/master/src/ca/rdmss/dflow/TaskSync.java). Flow disruptor start it, wait for the end then start next task in a sequence. All synchronous tasks run in the same thread.
+Sync task is descendent from [`TaskSync< T >`](https://github.com/serhioms/DisruptorFlow/blob/master/src/ca/rdmss/dflow/TaskSync.java). Flow disruptor start it, wait for the end then start next task in a sequence of sync. All synchronous tasks run in the same thread. From [XPDL](http://www.xpdl.org/standards/xpdl-2.2/XPDL%202.2%20(2012-02-24).pdf) prospective sync tasks equivalent to FULL-BLOCKED activities.
 
-    public class TestSyncTask extends TaskSync<TestContext> {
+    public class TestSyncTask extends [TaskSync](https://github.com/serhioms/DisruptorFlow/blob/master/src/ca/rdmss/dflow/TaskSync.java)<[TestContext](https://github.com/serhioms/DisruptorFlow/blob/master/test/ca/rdmss/test/dflow/impl/TestContext.java)> {
+    
     	int id = tasskIdGenerator.incrementAndGet();
     	
         @Override
-        public TaskTransition execute(TestContext context) throws Throwable {
+        public [TaskTransition](https://github.com/serhioms/DisruptorFlow/blob/master/src/ca/rdmss/dflow/TaskTransition.java); execute([TestContext](https://github.com/serhioms/DisruptorFlow/blob/master/test/ca/rdmss/test/dflow/impl/TestContext.java) context) throws Throwable {
             System.out.printf("%d) Hi from Sync!\n", id);
-            return TaskTransition.Next;
+            return [TaskTransition.Next](https://github.com/serhioms/DisruptorFlow/blob/master/src/ca/rdmss/dflow/TaskTransition.java);
         }
     }
 
 ## Async Task
 
-Async task is descendant from `TaskAsync< T >`. Flow disruptor start it in new thread then immedeately start next task in a sequence. All asynchronous tasks run in separate threads in parallel of synchronous tasks.
+Async task is descendant from [`TaskAsync< T >`](https://github.com/serhioms/DisruptorFlow/blob/master/src/ca/rdmss/dflow/TaskAsync.java). Flow disruptor start it in new thread then do not wait until this task get finished means immedeately start next task in a sequence of async tasks. All asynchronous tasks are run in parallel in separate threads. From [XPDL](http://www.xpdl.org/standards/xpdl-2.2/XPDL%202.2%20(2012-02-24).pdf) prospective async tasks equivalent to NON-BLOCKED activities.
 
-    public class TestAsyncTask extends TaskAsync<TestContext> {
+    public class TestAsyncTask extends [TaskAsync](https://github.com/serhioms/DisruptorFlow/blob/master/src/ca/rdmss/dflow/TaskAsync.java)<[TestContext](https://github.com/serhioms/DisruptorFlow/blob/master/test/ca/rdmss/test/dflow/impl/TestContext.java)> {
+    
     	int id = tasskIdGenerator.incrementAndGet();
 
     	@Override
-        public TaskTransition execute(TestContext context) throws Throwable {
+        public [TaskTransition.Next](https://github.com/serhioms/DisruptorFlow/blob/master/src/ca/rdmss/dflow/TaskTransition.java) execute([TestContext](https://github.com/serhioms/DisruptorFlow/blob/master/test/ca/rdmss/test/dflow/impl/TestContext.java) context) throws Throwable {
             System.out.printf("%d) Hi from Async!\n", id);
-            return TaskTransition.Next;
+            return [TaskTransition.Next](https://github.com/serhioms/DisruptorFlow/blob/master/src/ca/rdmss/dflow/TaskTransition.java).Next;
         }
     }
     
 ## Flow
                 
-Flow (or subflow) is descendant from `TaskFlow< T >`. You can set many sync/asyn tasks for the flow in constructor or vie setter. All this task will be executed sequentially. You can set specific exception handler for the flow/subflow.
+Flow (or subflow) is descendant from [`TaskFlow< T >`](https://github.com/serhioms/DisruptorFlow/blob/master/src/ca/rdmss/dflow/TaskFlow.java). You can set list of sync/asyn tasks in flow constructor or vie setters. Also you can specify exception handler for the flow.
 
-	    TaskFlow<TestContext> flow = new TaskFlow<TestContext>(
+	    [TaskFlow](https://github.com/serhioms/DisruptorFlow/blob/master/src/ca/rdmss/dflow/TaskFlow.java)<[TestContext](https://github.com/serhioms/DisruptorFlow/blob/master/test/ca/rdmss/test/dflow/impl/TestContext.java)> flow = new [TaskFlow](https://github.com/serhioms/DisruptorFlow/blob/master/src/ca/rdmss/dflow/TaskFlow.java)<[TestContext](https://github.com/serhioms/DisruptorFlow/blob/master/test/ca/rdmss/test/dflow/impl/TestContext.java)>(
 	            new TestSyncTask(),
 	            new TestAsyncTask(),
 	            new TestSyncTask());
 
 ## Flow Disruptor
 
-Flow disruptor is generic class which perform task flow execution vie pipeline pattern. Pipeline pattern described [here](https://github.com/LMAX-Exchange/disruptor/blob/master/docs/Disruptor.docx). The only parameter of flow disruptor is context class.
+Flow disruptor is generic class which perform task flow execution vie pipeline pattern. Pipeline pattern described [here](https://github.com/LMAX-Exchange/disruptor/blob/master/docs/Disruptor.docx). The only parameter for flow disruptor is an object of context class.
 
-	    DisruptorFlow<TestContext> dflow = new DisruptorFlow<TestContext>();
+	    [DisruptorFlow](https://github.com/serhioms/DisruptorFlow/blob/master/src/ca/rdmss/dflow/DisruptorFlow.java)<[TestContext](https://github.com/serhioms/DisruptorFlow/blob/master/test/ca/rdmss/test/dflow/impl/TestContext.java)> dflow = new DisruptorFlow<[TestContext](https://github.com/serhioms/DisruptorFlow/blob/master/test/ca/rdmss/test/dflow/impl/TestContext.java)>();
         ***
 	    dflow.start();
         ***
 	    dflow.stop();
 
-## Exception Handler
+## Exception Handling
 
-Exception Handler is generic class which flow disruptor call on any exception happen during task execution. There is a default handler implemented as simple as System.err messenger.
+Exception Handler is generic class which flow disruptor call on any exception during task execution. There is a default handler implemented as simple as System.err messenger.
 
-	    dflow.setExceptionHandler(new ExceptionHandler<TestContext>(){
+	    dflow.setExceptionHandler(new [ExceptionHandler](https://github.com/serhioms/DisruptorFlow/blob/master/src/ca/rdmss/dflow/ExceptionHandler.java)<[TestContext](https://github.com/serhioms/DisruptorFlow/blob/master/test/ca/rdmss/test/dflow/impl/TestContext.java)>(){
 	        @Override
-	        public TaskTransition handleTaskException(TestContext context, Throwable ex) {
+	        public [TaskTransition.Next](https://github.com/serhioms/DisruptorFlow/blob/master/src/ca/rdmss/dflow/TaskTransition.java) handleTaskException([TestContext](https://github.com/serhioms/DisruptorFlow/blob/master/test/ca/rdmss/test/dflow/impl/TestContext.java) context, Throwable ex) {
 	            System.err.printf("Flow failed due to %s\n", ex.getMessage());
-	            return TaskTransition.Fail;
+	            return [TaskTransition.Next](https://github.com/serhioms/DisruptorFlow/blob/master/src/ca/rdmss/dflow/TaskTransition.java).Fail;
 	        }
 	    });
 
 ## Flow context
 
-Flow context is any java class. Context instance must be provided when you run particular flow. This instance will be propagated among all flow task execution.
+Flow context can be any java class object. Context object must be provided once per flow run. The context will be propagated among all executed tasks.
 
-    public class TestContext {
+    public class [TestContext](https://github.com/serhioms/DisruptorFlow/blob/master/test/ca/rdmss/test/dflow/impl/TestContext.java) {
     	***
     }
     
-    dflow.process(new TestContext(), flow);
+    dflow.process(new [TestContext](https://github.com/serhioms/DisruptorFlow/blob/master/test/ca/rdmss/test/dflow/impl/TestContext.java)(), flow);
 
 
 ### [Full Example](https://github.com/serhioms/DisruptorFlow/blob/master/test/ca/rdmss/test/dflow/DFlowExample.java)
@@ -86,7 +88,7 @@ Typical output:
 	3) Hi from Sync!
 	2) Hi from Async!
 	
-Async task is the second in flow but usually executed bit later then third sync task.
+Async task is the second in the test flow but due to executing in separate thread without any synchronization become third in log.
 
     
 ## Usage
