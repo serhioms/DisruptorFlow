@@ -10,7 +10,7 @@ This is a regular Maven project.
 
 ## Sync Task
 
-Sync task is descendent from `TaskSync< T >`. Flow disruptor start it, wait for the end then start next task in a sequence. All synchronous tasks run in the same thread.
+Sync task is descendent from [`TaskSync< T >`](https://github.com/serhioms/DisruptorFlow/blob/master/src/ca/rdmss/dflow/TaskSync.java). Flow disruptor start it, wait for the end then start next task in a sequence. All synchronous tasks run in the same thread.
 
     public class TestSyncTask extends TaskSync<TestContext> {
     	int id = tasskIdGenerator.incrementAndGet();
