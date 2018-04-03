@@ -6,7 +6,7 @@ This is a regular Maven project.
 # What is special?
 Of course it is [LMax Disruptor](https://github.com/LMAX-Exchange/disruptor) pattern! According to Big Idea from lmax all the work must be done in one thread which means fast. Very fast and very efficient which is reflected not only in accurate and memory efficient code of disruptor implementation but particulary in [round buffer](https://github.com/LMAX-Exchange/disruptor/blob/master/src/main/java/com/lmax/disruptor/RingBuffer.java) pattern. Actually [round buffer](https://github.com/LMAX-Exchange/disruptor/blob/master/src/main/java/com/lmax/disruptor/RingBuffer.java) is the heart of disruptor.
 
-From the sync/async task execution prospective there are two [unicast-pipeline](https://github.com/LMAX-Exchange/disruptor/blob/master/docs/Disruptor.docx) disruptors can make it happen. First desruptor working in it's own first thread sequentially perform sync tasks. Secon disruptor working in it's own second thread sequentially perform async tasks. 
+From the sync/async task execution prospective there are two [unicast-pipeline](https://github.com/LMAX-Exchange/disruptor/blob/master/docs/Disruptor.docx) disruptors can make it happens. First desruptor working in it's own first thread sequentially perform sync tasks. Second disruptor working in it's own second thread sequentially perform async tasks. 
 
 ## Flow disruptor processing diagram
 
