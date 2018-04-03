@@ -1,7 +1,12 @@
 # Flow Disruptor
-Sequential sync/async task processing based on [LMax Disruptor](https://github.com/LMAX-Exchange/disruptor)
+Sequential sync/async task processing based on [LMax Disruptor](https://github.com/LMAX-Exchange/disruptor).
 
 This is a regular Maven project.
+
+# What is special?
+Of course it is [LMax Disruptor](https://github.com/LMAX-Exchange/disruptor) pattern! According to Big Idea from lmax all the work must be done in one thread which means fast. Very fast and very efficient which is reflected not only in accurate and memory efficient code of disruptor implementation but particulary in [round buffer](https://github.com/LMAX-Exchange/disruptor/blob/master/src/main/java/com/lmax/disruptor/RingBuffer.java) pattern. Actually [round buffer](https://github.com/LMAX-Exchange/disruptor/blob/master/src/main/java/com/lmax/disruptor/RingBuffer.java) is the heart of disruptor.
+
+From the sync/async task execution prospective there are two [unicast-pipeline](https://github.com/LMAX-Exchange/disruptor/blob/master/docs/Disruptor.docx) disruptors can make it happen. First desruptor working in it's own first thread sequentially perform sync tasks. Secon disruptor working in it's own second thread sequentially perform async tasks. 
 
 ## Flow disruptor processing diagram
 
@@ -10,7 +15,7 @@ This is a regular Maven project.
 
 ## Sync Task
 
-Sync task is descendent from [`TaskSync< T >`](https://github.com/serhioms/DisruptorFlow/blob/master/src/ca/rdmss/dflow/TaskSync.java). Flow disruptor start it, wait for the end then start next one in a sequence. All synchronous tasks run in the same thread. From [XPDL](http://www.xpdl.org/standards/xpdl-2.2/XPDL%202.2%20(2012-02-24).pdf) prospective sync tasks equivalent to FULL-BLOCKED activities.
+Sync task is descendent from [`TaskSync< T >`](https://github.com/serhioms/DisruptorFlow/blob/master/src/ca/rdmss/dflow/TaskSync.java). Flow disruptor start it, wait for the end then start next one in a sequence. All synchronous tasks run in the same thread first thread. From [XPDL](http://www.xpdl.org/standards/xpdl-2.2/XPDL%202.2%20(2012-02-24).pdf) prospective sync tasks equivalent to FULL-BLOCKED activities.
 
     public class TestSyncTask extends TaskSync<TestContext> {
     
@@ -25,7 +30,7 @@ Sync task is descendent from [`TaskSync< T >`](https://github.com/serhioms/Disru
 
 ## Async Task
 
-Async task is descendant from [`TaskAsync< T >`](https://github.com/serhioms/DisruptorFlow/blob/master/src/ca/rdmss/dflow/TaskAsync.java). Flow disruptor start it in new thread then do not wait until this task get finished means immedeately start next task in a sequence of async tasks. All asynchronous tasks are run in parallel in separate threads. From [XPDL](http://www.xpdl.org/standards/xpdl-2.2/XPDL%202.2%20(2012-02-24).pdf) prospective async tasks equivalent to NON-BLOCKED activities.
+Async task is descendant from [`TaskAsync< T >`](https://github.com/serhioms/DisruptorFlow/blob/master/src/ca/rdmss/dflow/TaskAsync.java). Flow disruptor start it in new thread then do not wait until this task get finished means immedeately start next task in a sequence. All asynchronous tasks are run in the same second thread. From [XPDL](http://www.xpdl.org/standards/xpdl-2.2/XPDL%202.2%20(2012-02-24).pdf) prospective async tasks equivalent to NON-BLOCKED activities.
 
     public class TestAsyncTask extends TaskAsync<TestContext> {
     
@@ -49,7 +54,7 @@ Flow (or subflow) is descendant from [`TaskFlow< T >`](https://github.com/serhio
 
 ## Flow Disruptor
 
-Flow disruptor is generic class which perform task flow execution vie pipeline pattern. Pipeline pattern described [here](https://github.com/LMAX-Exchange/disruptor/blob/master/docs/Disruptor.docx). The only parameter for flow disruptor is an object of context class.
+Flow disruptor is generic class which perform task flow execution vie [LMax Disruptor](https://github.com/LMAX-Exchange/disruptor) pattern. The only parameter for flow disruptor is an object of context class.
 
 	    DisruptorFlow<TestContext> dflow = new DisruptorFlow<TestContext>();
         ***
