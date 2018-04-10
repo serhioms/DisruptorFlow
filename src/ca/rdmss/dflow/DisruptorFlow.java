@@ -54,6 +54,11 @@ public class DisruptorFlow<T> {
 		}
 	}
 
+	@SafeVarargs
+	final public Task<T>[] createFlow(Task<T>... tasks){
+		return tasks;
+	}
+
 	public void setExceptionHandler(ExceptionHandler<T> exceptionHandler) {
 		this.exceptionHandler = exceptionHandler;
 	}
