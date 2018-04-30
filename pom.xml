@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ca.rdmss</groupId>
 	<artifactId>disruptor-flow</artifactId>
-	<version>8.0.1</version>
+	<version>1.0.0</version>
 
 	<packaging>jar</packaging>
 
