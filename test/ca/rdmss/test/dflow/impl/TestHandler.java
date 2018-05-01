@@ -1,12 +1,21 @@
 package ca.rdmss.test.dflow.impl;
 
-import ca.rdmss.dflow.lmax.ContextEvent;
-import ca.rdmss.dflow.lmax.ContextHandler;
+import java.util.concurrent.atomic.AtomicReference;
 
-public class TestHandler implements ContextHandler<TestContext>{
+import com.lmax.disruptor.EventHandler;
+
+public class TestHandler implements EventHandler<AtomicReference<TestContext>> {
 
 	@Override
-	public void onEvent(ContextEvent<TestContext> event, long sequence, boolean endOfBatch) throws Exception {
-		event.getContext().counter.incrementAndGet();
+	public void onEvent(AtomicReference<TestContext> event, long sequence, boolean endOfBatch) throws Exception {
+		if( event.get() == null ) {
+			System.currentTimeMillis();
+		} else if( event.get().getContext() == null ) {
+			System.currentTimeMillis();
+		} else if( event.get().getContext().counter == null ) {
+			System.currentTimeMillis();
+		}
+
+		event.get().getContext().counter.incrementAndGet();
 	}
 }

@@ -1,21 +1,27 @@
-package ca.rdmss.dflow.lmax;
-
-import java.util.concurrent.atomic.AtomicReference;
+package ca.rdmss.dflow.impl;
 
 import ca.rdmss.dflow.Task;
 
 public class ContextEvent<T> {
 
-	final private AtomicReference<T> ref = new AtomicReference<T>();
-	
+	private T context;
 	private Task<T>[] tasks;
 	
+	public ContextEvent() {
+	}
+
+	@SafeVarargs
+	public ContextEvent(T context, Task<T>... tasks) {
+		this.context = context;
+		this.tasks = tasks;
+	}
+
 	public T getContext() {
-		return ref.get();
+		return context;
 	}
 	
 	public void setContext(T context) {
-		ref.set(context);
+		this.context = context;
 	}
 
 	public Task<T>[] getTasks() {

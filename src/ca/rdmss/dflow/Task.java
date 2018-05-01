@@ -1,5 +1,7 @@
 package ca.rdmss.dflow;
 
+import ca.rdmss.dflow.impl.ContextEvent;
+
 public interface Task<T> {
 
 	// Task execution interface
@@ -18,5 +20,5 @@ public interface Task<T> {
 	public void setSet(Task<T>[] tasks);
 	
 	// Task/flow exception handler
-	public ExceptionHandler<T> getExceptionHandler();
+	public ExceptionHandler<ContextEvent<T>> getExceptionHandler();
 }

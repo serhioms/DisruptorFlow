@@ -1,10 +1,12 @@
 package ca.rdmss.dflow;
 
+import ca.rdmss.dflow.impl.ContextEvent;
+
 final public class TaskFlow<T> extends TaskSync<T>{
 
 	private Task<T>[] set;
 
-	private ExceptionHandler<T> exceptionHandler;
+	private ExceptionHandler<ContextEvent<T>> exceptionHandler;
 	
 	@SafeVarargs
 	public TaskFlow(Task<T>... set) {
@@ -12,7 +14,7 @@ final public class TaskFlow<T> extends TaskSync<T>{
 	}
 
 	@SafeVarargs
-	public TaskFlow(ExceptionHandler<T> exceptionHandler, Task<T>... set) {
+	public TaskFlow(ExceptionHandler<ContextEvent<T>> exceptionHandler, Task<T>... set) {
 		this.exceptionHandler = exceptionHandler;
 		this.set = set;
 	}
@@ -36,11 +38,11 @@ final public class TaskFlow<T> extends TaskSync<T>{
 	}
 
 	@Override
-	public ExceptionHandler<T> getExceptionHandler() {
+	public ExceptionHandler<ContextEvent<T>> getExceptionHandler() {
 		return exceptionHandler;
 	}
 
-	public void setExceptionHandler(ExceptionHandler<T> exceptionHandler) {
+	public void setExceptionHandler(ExceptionHandler<ContextEvent<T>> exceptionHandler) {
 		this.exceptionHandler = exceptionHandler;
 	}
 }

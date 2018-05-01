@@ -2,7 +2,9 @@ package ca.rdmss.test.dflow.impl;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class TestContext2 {
+import ca.rdmss.dflow.impl.ContextEvent;
+
+public class TestContext2 extends ContextEvent<TestContext2> {
 
 	final public AtomicInteger counter = new AtomicInteger(0);
 	final public boolean isPrint;

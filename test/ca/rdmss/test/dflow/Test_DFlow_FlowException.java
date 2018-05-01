@@ -11,6 +11,7 @@ import ca.rdmss.dflow.DisruptorFlow;
 import ca.rdmss.dflow.ExceptionHandler;
 import ca.rdmss.dflow.TaskFlow;
 import ca.rdmss.dflow.TaskTransition;
+import ca.rdmss.dflow.impl.ContextEvent;
 import ca.rdmss.multitest.annotation.MultiBefore;
 import ca.rdmss.multitest.annotation.MultiTest;
 import ca.rdmss.multitest.annotation.MultiThread;
@@ -42,11 +43,11 @@ public class Test_DFlow_FlowException {
 	public void setUp() throws Exception {
 		Suite_DFlow.test.clean();
 
-		dflow.setExceptionHandler(new ExceptionHandler<TestContext>(){
+		dflow.setExceptionHandler(new ExceptionHandler<ContextEvent<TestContext>>(){
 
 			@Override
-			public TaskTransition handleTaskException(TestContext context, Throwable ex) {
-				System.err.printf("%d: ", context.counter.get());
+			public TaskTransition handleTaskException(ContextEvent<TestContext> event, Throwable ex) {
+				System.err.printf("%d: ", event.getContext().counter.get());
 				ex.printStackTrace(System.err);
 				return TaskTransition.Fail;
 			}

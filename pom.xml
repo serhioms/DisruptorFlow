@@ -1,30 +1,36 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	
 	<groupId>ca.rdmss</groupId>
 	<artifactId>disruptor-flow</artifactId>
-	<version>1.0.0</version>
-
 	<packaging>jar</packaging>
+	<version>7.0.1</version>
+	
+	<name>Disruptor Flow</name>
+	<description>Sync/Async sequential task processing based on LMaxDisruptor</description>
+	<url>https://github.com/serhioms/DisruptorFlow</url>
 
 	<dependencies>
-		<!-- https://mvnrepository.com/artifact/com.lmax/disruptor -->
+		<!-- https://github.com/serhioms/FastThreadPool -->
 		<dependency>
-			<groupId>com.lmax</groupId>
-			<artifactId>disruptor</artifactId>
-			<version>3.3.6</version>
+			<groupId>ca.rdmss</groupId>
+			<artifactId>fast-threadpool</artifactId>
+			<version>7.0.1</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/ca.rdmss/multi-test -->
+		<!-- https://github.com/serhioms/MultiTest -->
 		<dependency>
 			<groupId>ca.rdmss</groupId>
 			<artifactId>multi-test</artifactId>
 			<version>1.2.0</version>
+			<scope>test</scope>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/junit/junit -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
@@ -38,8 +44,8 @@
 				<version>3.6.1</version>
 				<configuration>
 					<!-- or whatever version you use -->
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 			<plugin>

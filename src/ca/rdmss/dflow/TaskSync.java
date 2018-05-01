@@ -1,5 +1,7 @@
 package ca.rdmss.dflow;
 
+import ca.rdmss.dflow.impl.ContextEvent;
+
 abstract public class TaskSync<T> implements Task<T> {
 
 	@Override
@@ -23,7 +25,7 @@ abstract public class TaskSync<T> implements Task<T> {
 	}
 
 	@Override
-	public ExceptionHandler<T> getExceptionHandler() {
+	public ExceptionHandler<ContextEvent<T>> getExceptionHandler() {
 		return null; // can be overridden in case of task specific handler
 	}
 }

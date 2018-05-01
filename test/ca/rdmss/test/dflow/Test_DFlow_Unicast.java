@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 import org.junit.Rule;
 import org.junit.Test;
 
+import ca.rdmss.dflow.impl.ContextEvent;
 import ca.rdmss.dflow.impl.UnicastDisruptor;
 import ca.rdmss.multitest.annotation.MultiBefore;
 import ca.rdmss.multitest.annotation.MultiEndOfSet;
@@ -29,14 +30,24 @@ public class Test_DFlow_Unicast {
 		
 		Suite_DFlow.test.clean();
 		
-		unicast = new UnicastDisruptor<TestContext>(new TestHandler()); // 1 consumer
+		unicast = new UnicastDisruptor<TestContext>(new TestHandler()) {
+			@Override
+			public void process(TestContext t) {
+				if( t.getContext() == null) {
+					System.currentTimeMillis();
+				}
+				if( t.getTasks() == null) {
+					System.currentTimeMillis();
+				}
+			}
+		}; // 1 consumer
 		
-		unicast.startDisruptor();
+		unicast.start();
 	}
 	
 	@MultiThread
 	public void producer(){
-		unicast.onData(context);
+		unicast.publish(context);
 	}
 
 	boolean isFailed;
@@ -62,9 +73,15 @@ public class Test_DFlow_Unicast {
 		context.counter.set(0);
 		
 		// Initialize new unicast
-		unicast = new UnicastDisruptor<TestContext>(new TestHandler()); // 1 consumer
+		unicast = new UnicastDisruptor<TestContext>(new TestHandler()) {
+
+			@Override
+			public void process(TestContext t) {
+			}
+			
+		}; // 1 consumer
 		
-		unicast.startDisruptor();
+		unicast.start();
 	}
 
 	@Test

@@ -8,12 +8,43 @@ import ca.rdmss.dflow.TaskAsync;
 import ca.rdmss.dflow.TaskFlow;
 import ca.rdmss.dflow.TaskSync;
 import ca.rdmss.dflow.TaskTransition;
+import ca.rdmss.dflow.impl.ContextEvent;
 
 public class DFlowExample {
 
+    static public void main(String[] args){
+    	
+	    DisruptorFlow<TestContext> dflow = new DisruptorFlow<TestContext>();
+
+	    dflow.setExceptionHandler(new ExceptionHandler<ContextEvent<TestContext>>(){
+	        @Override
+	        public TaskTransition handleTaskException(ContextEvent<TestContext> context, Throwable ex) {
+	            System.err.printf("Flow failed due to %s\n", ex.getMessage());
+	            ex.printStackTrace();
+	            return TaskTransition.Fail;
+	        }
+	    });
+
+	    dflow.start();
+
+	    TaskFlow<TestContext> flow = new TaskFlow<TestContext>(
+	            new TestSyncTask(),
+	            new TestAsyncTask(),
+	            new TestSyncTask());
+
+
+	    dflow.process(new TestContext(), flow);
+	    
+	    dflow.stop();
+    }    
+
+
+
+
+
     static AtomicInteger tasskIdGenerator = new AtomicInteger(0);
 	
-    static class TestContext {
+    static class TestContext extends ContextEvent<TestContext>{
     }
 	
     static class TestSyncTask extends TaskSync<TestContext> {
@@ -36,28 +67,4 @@ public class DFlowExample {
         }
     }
 
-    static public void main(String[] args){
-    	
-	    DisruptorFlow<TestContext> dflow = new DisruptorFlow<TestContext>();
-
-	    dflow.setExceptionHandler(new ExceptionHandler<TestContext>(){
-	        @Override
-	        public TaskTransition handleTaskException(TestContext context, Throwable ex) {
-	            System.err.printf("Flow failed due to %s\n", ex.getMessage());
-	            return TaskTransition.Fail;
-	        }
-	    });
-
-	    dflow.start();
-
-	    TaskFlow<TestContext> flow = new TaskFlow<TestContext>(
-	            new TestSyncTask(),
-	            new TestAsyncTask(),
-	            new TestSyncTask());
-
-
-	    dflow.process(new TestContext(), flow);
-	    
-	    dflow.stop();
-    }    
 }
