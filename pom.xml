@@ -5,7 +5,7 @@
 	<groupId>ca.rdmss</groupId>
 	<artifactId>disruptor-flow</artifactId>
 	<packaging>jar</packaging>
-	<version>7.0.1</version>
+	<version>8.0.1</version>
 	
 	<name>Disruptor Flow</name>
 	<description>Sync/Async sequential task processing based on LMaxDisruptor</description>
@@ -16,7 +16,7 @@
 		<dependency>
 			<groupId>ca.rdmss</groupId>
 			<artifactId>fast-threadpool</artifactId>
-			<version>7.0.1</version>
+			<version>8.0.1</version>
 		</dependency>
 		<!-- https://github.com/serhioms/MultiTest -->
 		<dependency>
