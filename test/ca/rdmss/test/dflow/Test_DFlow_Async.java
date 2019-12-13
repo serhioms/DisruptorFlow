@@ -42,8 +42,6 @@ public class Test_DFlow_Async {
 				);
 	}
 
-	boolean isFailed;
-
 	@MultiEndOfSet
 	public void endOfSet(){
 
@@ -55,10 +53,9 @@ public class Test_DFlow_Async {
 		int actual = Suite_DFlow.test.getTotal();
 		
 		if( actual != expected ){ 
-			isFailed = true;
-			rule.helper.result += String.format(" %s: expected=%,d actual=%,d", "failed", expected, actual);
+			rule.addFailed(expected, actual);
 		} else {
-			rule.helper.result += String.format(" %s: expected=%,d actual=%,d", "pass", expected, actual);
+			rule.addPass(expected, actual);
 		}
 		
 		// Prepare for next set
@@ -74,7 +71,7 @@ public class Test_DFlow_Async {
 
 		System.out.printf("%s\n", rule.getReport());
 
-		if( isFailed ){
+		if( rule.isFailed() ){
 			fail("Check log");
 		}
 	}

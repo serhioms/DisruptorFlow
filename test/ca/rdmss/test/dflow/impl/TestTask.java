@@ -50,11 +50,12 @@ public class TestTask extends TaskSync<TestContext> {
 		if( isException ){
 			context.track(taskId);
 			if( fail == null ){
-				throw new RuntimeException(String.format(" %s get failed by test reason!", this));
+				System.out.println(String.format(" %s get failed by test reason!", this));
 			} else if( fail.get() > 0 ){
 				fail.decrementAndGet();
-				throw new RuntimeException(String.format(" %s get failed by test reason!", this));
+				System.out.println(String.format(" %s get failed by test reason!", this));
 			}
+			return TaskTransition.End;
 		} else if( transition != null ){
 			if( fail == null ){
 				return transition;
@@ -63,7 +64,6 @@ public class TestTask extends TaskSync<TestContext> {
 				return transition;
 			}
 		}
-		
 		return TaskTransition.Next;
 	}
 

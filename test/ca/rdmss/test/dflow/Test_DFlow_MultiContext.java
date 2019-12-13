@@ -110,17 +110,15 @@ public class Test_DFlow_MultiContext {
 
 		int actual = Suite_DFlow.test.getTotal();
 		
-		boolean isFailed = actual != expected;
-		
-		if( isFailed ){ 
-			rule.helper.result += String.format(" %s: expected=%,d actual=%,d", "failed", expected, actual);
+		if( actual != expected ){ 
+			rule.addFailed(expected, actual);
 		} else {
-			rule.helper.result += String.format(" %s: expected=%,d actual=%,d", "pass", expected, actual);
+			rule.addPass(expected, actual);
 		}
 
 		System.out.printf("%s\n", rule.getReport());
 
-		if( isFailed ){
+		if( rule.isFailed() ){
 			fail("Check log");
 		}
 	}

@@ -19,7 +19,7 @@ public class Suite_DFlow {
 	/*
 	 * How many time to stress?
 	 */
-	final public static int MAX_TRY = 2_000_000;
+	final public static int MAX_TRY = 2_000;
 	final public static String THREAD_SET = "1,2,3,4";
 
 	final static public TestHelper test = new TestHelper();  
